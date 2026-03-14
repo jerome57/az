@@ -27,38 +27,25 @@
       --sand:      #f5ede0;
       --sand-dark: #e8d5bc;
       --clay:      #b85c2a;
-      --clay-deep: #7a3518;
       --sky:       #4a9dc4;
-      --sage:      #5a8c6e;
       --dusk:      #2c2420;
       --dust:      #8c7060;
       --white:     #fdfaf7;
 
-      --cat-attraction: #b85c2a;
-      --cat-art:        #4a9dc4;
-      --cat-restaurant: #d4a019;
-      --cat-coffee:     #7a6040;
-      --cat-shopping:   #9b6bb5;
-      --cat-events:     #c0392b;
-      --cat-hotel:      #4a7fb5;
-
-      --radius-card: 14px;
-      --shadow-card: 0 2px 12px rgba(44,36,32,.10);
+      --radius-card:       14px;
+      --shadow-card:       0 2px 12px rgba(44,36,32,.10);
       --shadow-card-hover: 0 6px 24px rgba(44,36,32,.18);
-      --transition: .2s ease;
+      --transition:        .2s ease;
+
       --font-body:    'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
       --font-display: 'Noto Serif TC', 'Georgia', serif;
-      --font-mono:    'SF Mono', 'Menlo', monospace;
 
-      /* Typography scale */
       --text-xs:   .70rem;
       --text-sm:   .80rem;
       --text-base: .88rem;
       --text-lg:   1.00rem;
-      --text-xl:   1.20rem;
       --text-2xl:  1.40rem;
       --lh-tight:  1.30;
-      --lh-normal: 1.55;
       --lh-loose:  1.70;
       --ls-tight:  -.02em;
       --ls-wide:   .04em;
@@ -92,12 +79,6 @@
       z-index: 100;
       border-bottom: 3px solid var(--clay);
     }
-    .header-title {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
     .header-title h1 {
       font-family: var(--font-display);
       font-size: var(--text-2xl);
@@ -107,12 +88,6 @@
       color: var(--white);
     }
     .header-title h1 span { color: var(--clay); }
-    .header-subtitle {
-      font-size: var(--text-xs);
-      font-weight: 300;
-      color: var(--dust);
-      letter-spacing: var(--ls-wide);
-    }
     .header-badge {
       background: var(--clay);
       color: var(--white);
@@ -129,12 +104,7 @@
     }
 
     /* ── Layout ──────────────────────────────────────── */
-    main {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-      min-height: 0;
-    }
+    main { flex: 1; display: flex; overflow: hidden; min-height: 0; }
 
     /* ── Sidebar ─────────────────────────────────────── */
     #sidebar {
@@ -148,6 +118,7 @@
       border-right: 1px solid var(--sand-dark);
       overflow: hidden;
       z-index: 50;
+      position: relative;
       transition: width .35s cubic-bezier(.4,0,.2,1),
                   min-width .35s cubic-bezier(.4,0,.2,1),
                   box-shadow .35s ease;
@@ -163,7 +134,6 @@
     /* ── Toggle Button ───────────────────────────────── */
     #sidebar-toggle {
       position: absolute;
-      /* sits on the right edge of the sidebar, vertically centred */
       top: 50%;
       right: -16px;
       transform: translateY(-50%);
@@ -179,14 +149,13 @@
       justify-content: center;
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(44,36,32,.18);
-      transition: background .2s, color .2s, transform .35s cubic-bezier(.4,0,.2,1);
       font-size: 13px;
+      transition: background .2s, color .2s, transform .35s cubic-bezier(.4,0,.2,1);
     }
     #sidebar-toggle:hover { background: var(--clay); color: var(--white); }
-    /* When sidebar is collapsed the arrow flips */
     #sidebar.collapsed #sidebar-toggle { transform: translateY(-50%) rotate(180deg); }
 
-    /* Collapsed mini icon strip */
+    /* ── Mini Icon Strip (collapsed only) ───────────── */
     #sidebar-icons {
       display: none;
       flex-direction: column;
@@ -196,7 +165,8 @@
       overflow: hidden;
     }
     #sidebar.collapsed #sidebar-icons { display: flex; }
-    #sidebar.collapsed #filter-bar { display: none; }
+    #sidebar.collapsed #filter-bar   { display: none; }
+
     .mini-icon-btn {
       width: 36px;
       height: 36px;
@@ -209,8 +179,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background .15s, color .15s;
       position: relative;
+      transition: background .15s, color .15s;
     }
     .mini-icon-btn:hover,
     .mini-icon-btn.active { background: var(--clay); color: var(--white); }
@@ -221,18 +191,18 @@
       transform: translateY(-50%);
       background: var(--dusk);
       color: var(--white);
-      font-size: .7rem;
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
       white-space: nowrap;
       padding: 4px 9px;
       border-radius: 6px;
       pointer-events: none;
       opacity: 0;
       transition: opacity .15s;
-      font-family: var(--font-body);
     }
     .mini-icon-btn:hover .mini-tooltip { opacity: 1; }
 
-    /* Filter bar */
+    /* ── Filter Bar ──────────────────────────────────── */
     #filter-bar {
       padding: 12px 14px;
       border-bottom: 1px solid var(--sand-dark);
@@ -240,16 +210,16 @@
       gap: 6px;
       overflow-x: auto;
       flex-shrink: 0;
+      background: var(--sand);
       scrollbar-width: thin;
       scrollbar-color: var(--sand-dark) transparent;
-      background: var(--sand);
       transition: opacity .25s ease;
     }
     #filter-bar::-webkit-scrollbar { height: 4px; }
     #filter-bar::-webkit-scrollbar-thumb { background: var(--sand-dark); border-radius: 4px; }
 
     .filter-btn {
-      border: none;
+      border: 1.5px solid var(--sand-dark);
       cursor: pointer;
       font-family: var(--font-body);
       font-size: var(--text-xs);
@@ -258,19 +228,14 @@
       padding: 6px 13px;
       border-radius: 999px;
       white-space: nowrap;
-      transition: background var(--transition), color var(--transition), transform .1s;
       background: var(--white);
       color: var(--dust);
-      border: 1.5px solid var(--sand-dark);
+      transition: background var(--transition), color var(--transition), transform .1s;
     }
-    .filter-btn:hover { background: var(--sand-dark); transform: translateY(-1px); }
-    .filter-btn.active {
-      background: var(--clay);
-      color: var(--white);
-      border-color: var(--clay);
-    }
+    .filter-btn:hover  { background: var(--sand-dark); transform: translateY(-1px); }
+    .filter-btn.active { background: var(--clay); color: var(--white); border-color: var(--clay); }
 
-    /* Location list */
+    /* ── Location List ───────────────────────────────── */
     #location-list {
       flex: 1;
       overflow-y: auto;
@@ -285,7 +250,7 @@
     #location-list::-webkit-scrollbar { width: 5px; }
     #location-list::-webkit-scrollbar-thumb { background: var(--sand-dark); border-radius: 4px; }
 
-    /* Card */
+    /* ── Card ────────────────────────────────────────── */
     .loc-card {
       background: var(--white);
       border: 1.5px solid var(--sand-dark);
@@ -295,25 +260,17 @@
       display: flex;
       align-items: flex-start;
       gap: 12px;
-      transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition);
       text-align: left;
       width: 100%;
       font-family: var(--font-body);
       color: var(--dusk);
+      transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition);
     }
-    .loc-card:hover {
-      box-shadow: var(--shadow-card-hover);
-      border-color: var(--clay);
-      transform: translateY(-2px);
-    }
-    .loc-card.is-base {
-      background: #eef4fb;
-      border-color: var(--sky);
-    }
-    .loc-card.is-highlight {
-      background: #fff8f3;
-      border-color: var(--clay);
-    }
+    .loc-card:hover         { box-shadow: var(--shadow-card-hover); border-color: var(--clay); transform: translateY(-2px); }
+    .loc-card.is-base       { background: #eef4fb; border-color: var(--sky); }
+    .loc-card.is-highlight  { background: #fff8f3; border-color: var(--clay); }
+    .loc-card.is-minor      { opacity: .88; }
+    .loc-card.is-minor:hover { opacity: 1; }
 
     .card-icon {
       width: 38px;
@@ -328,6 +285,14 @@
       margin-top: 2px;
       box-shadow: 0 2px 6px rgba(0,0,0,.18);
     }
+    .loc-card.is-minor .card-icon {
+      width: 30px;
+      height: 30px;
+      font-size: 12px;
+      margin-top: 6px;
+      opacity: .85;
+    }
+
     .card-body { flex: 1; min-width: 0; }
     .card-name {
       font-weight: 700;
@@ -336,6 +301,8 @@
       letter-spacing: var(--ls-tight);
       margin-bottom: 4px;
     }
+    .loc-card.is-minor .card-name { font-weight: 500; color: var(--dust); }
+
     .card-distance {
       display: inline-flex;
       align-items: center;
@@ -366,14 +333,14 @@
       color: var(--clay);
       margin-bottom: 4px;
     }
+    .card-tag.tag-minor {
+      background: var(--sand-dark);
+      color: var(--dust);
+      font-weight: 500;
+    }
 
     /* ── Map ─────────────────────────────────────────── */
-    #map-wrap {
-      flex: 1;
-      position: relative;
-      padding: 10px;
-      min-width: 0;
-    }
+    #map-wrap { flex: 1; position: relative; padding: 10px; min-width: 0; }
     #map {
       width: 100%;
       height: 100%;
@@ -382,7 +349,7 @@
       border: 1.5px solid var(--sand-dark);
     }
 
-    /* Leaflet popup override */
+    /* ── Leaflet Popup ───────────────────────────────── */
     .leaflet-popup-content-wrapper {
       border-radius: 10px !important;
       box-shadow: var(--shadow-card-hover) !important;
@@ -415,7 +382,7 @@
       line-height: var(--lh-loose);
     }
 
-    /* Custom marker */
+    /* ── Map Pins ────────────────────────────────────── */
     .map-pin {
       width: 34px;
       height: 34px;
@@ -427,20 +394,29 @@
       justify-content: center;
       color: #fff;
       font-size: 14px;
-      transition: transform .15s;
+      transition: transform .15s, opacity .15s;
     }
     .map-pin:hover { transform: scale(1.15); }
+    .map-pin.is-minor {
+      width: 24px;
+      height: 24px;
+      border-width: 2px;
+      font-size: 11px;
+      opacity: .8;
+      box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    }
+    .map-pin.is-minor:hover { opacity: 1; transform: scale(1.2); }
 
-    /* ── Empty state ─────────────────────────────────── */
+    /* ── Empty State ─────────────────────────────────── */
     .empty-state {
       text-align: center;
       padding: 40px 20px;
       color: var(--dust);
-      font-size: .85rem;
+      font-size: var(--text-sm);
     }
     .empty-state i { font-size: 2rem; margin-bottom: 10px; opacity: .4; display: block; }
 
-    /* ── Mobile layout ───────────────────────────────── */
+    /* ── Mobile ──────────────────────────────────────── */
     @media (max-width: 768px) {
       html, body { overflow: auto; }
       main { flex-direction: column; overflow: visible; }
@@ -460,22 +436,12 @@
         box-shadow: none;
       }
       #sidebar.collapsed #sidebar-icons { display: none; }
-      #sidebar-toggle {
-        right: 14px;
-        top: auto;
-        bottom: -16px;
-        transform: none;
-      }
-      #sidebar.collapsed #sidebar-toggle { transform: rotate(180deg); top: auto; bottom: -16px; }
-      #map-wrap {
-        height: 55vw;
-        min-height: 300px;
-        flex: none;
-      }
+      #sidebar-toggle { right: 14px; top: auto; bottom: -16px; transform: none; }
+      #sidebar.collapsed #sidebar-toggle { transform: rotate(180deg); }
+      #map-wrap { height: 55vw; min-height: 300px; flex: none; }
       #map { height: 100%; }
       .header-title h1 { font-size: 1.1rem; }
     }
-
     @media (max-width: 480px) {
       header { padding: 10px 14px; }
       .header-badge { display: none; }
@@ -497,58 +463,40 @@
 
   <!-- ── Main ── -->
   <main role="main">
-    <!-- Sidebar -->
-    <aside id="sidebar" aria-label="景點列表" style="position:relative;">
-      <!-- Toggle Button -->
+    <aside id="sidebar" aria-label="景點列表">
+      <!-- Toggle -->
       <button id="sidebar-toggle" aria-label="收折側欄" title="收折 / 展開側欄">
         <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
       </button>
 
-      <!-- Mini icon strip (visible only when collapsed) -->
+      <!-- Mini icon strip (collapsed only) -->
       <div id="sidebar-icons" aria-hidden="true">
-        <button class="mini-icon-btn active" data-cat="all" title="全部">
-          🗺️<span class="mini-tooltip">全部顯示</span>
-        </button>
-        <button class="mini-icon-btn" data-cat="attraction" title="壯闊風景">
-          🏜️<span class="mini-tooltip">壯闊風景</span>
-        </button>
-        <button class="mini-icon-btn" data-cat="art" title="藝文展覽">
-          🎨<span class="mini-tooltip">藝文展覽</span>
-        </button>
-        <button class="mini-icon-btn" data-cat="restaurant" title="頂級餐廳">
-          🍽️<span class="mini-tooltip">頂級餐廳</span>
-        </button>
-        <button class="mini-icon-btn" data-cat="coffee" title="精品咖啡">
-          ☕<span class="mini-tooltip">精品咖啡</span>
-        </button>
-        <button class="mini-icon-btn" data-cat="shopping" title="購物">
-          🛍️<span class="mini-tooltip">購物</span>
-        </button>
-        <button class="mini-icon-btn" data-cat="events" title="賽事演出">
-          🎟️<span class="mini-tooltip">賽事演出</span>
-        </button>
-        <button class="mini-icon-btn" data-cat="hotel" title="住宿">
-          🏨<span class="mini-tooltip">住宿</span>
-        </button>
+        <button class="mini-icon-btn active" data-cat="all">🗺️<span class="mini-tooltip">全部顯示</span></button>
+        <button class="mini-icon-btn" data-cat="attraction">🏜️<span class="mini-tooltip">壯闊風景</span></button>
+        <button class="mini-icon-btn" data-cat="art">🎨<span class="mini-tooltip">藝文展覽</span></button>
+        <button class="mini-icon-btn" data-cat="restaurant">🍽️<span class="mini-tooltip">頂級餐廳</span></button>
+        <button class="mini-icon-btn" data-cat="coffee">☕<span class="mini-tooltip">精品咖啡</span></button>
+        <button class="mini-icon-btn" data-cat="shopping">🛍️<span class="mini-tooltip">購物</span></button>
+        <button class="mini-icon-btn" data-cat="events">🎟️<span class="mini-tooltip">賽事演出</span></button>
+        <button class="mini-icon-btn" data-cat="hotel">🏨<span class="mini-tooltip">住宿</span></button>
       </div>
 
-      <!-- Filter -->
+      <!-- Filter bar -->
       <nav id="filter-bar" role="navigation" aria-label="景點分類篩選">
-        <button class="filter-btn active" data-cat="all" aria-pressed="true">🗺️ 全部</button>
-        <button class="filter-btn" data-cat="attraction" aria-pressed="false">🏜️ 壯闊風景</button>
-        <button class="filter-btn" data-cat="art" aria-pressed="false">🎨 藝文展覽</button>
-        <button class="filter-btn" data-cat="restaurant" aria-pressed="false">🍽️ 頂級餐廳</button>
-        <button class="filter-btn" data-cat="coffee" aria-pressed="false">☕ 精品咖啡</button>
-        <button class="filter-btn" data-cat="shopping" aria-pressed="false">🛍️ 購物</button>
-        <button class="filter-btn" data-cat="events" aria-pressed="false">🎟️ 賽事演出</button>
-        <button class="filter-btn" data-cat="hotel" aria-pressed="false">🏨 住宿</button>
+        <button class="filter-btn active" data-cat="all"        aria-pressed="true" >🗺️ 全部</button>
+        <button class="filter-btn"        data-cat="attraction" aria-pressed="false">🏜️ 壯闊風景</button>
+        <button class="filter-btn"        data-cat="art"        aria-pressed="false">🎨 藝文展覽</button>
+        <button class="filter-btn"        data-cat="restaurant" aria-pressed="false">🍽️ 頂級餐廳</button>
+        <button class="filter-btn"        data-cat="coffee"     aria-pressed="false">☕ 精品咖啡</button>
+        <button class="filter-btn"        data-cat="shopping"   aria-pressed="false">🛍️ 購物</button>
+        <button class="filter-btn"        data-cat="events"     aria-pressed="false">🎟️ 賽事演出</button>
+        <button class="filter-btn"        data-cat="hotel"      aria-pressed="false">🏨 住宿</button>
       </nav>
 
       <!-- List -->
       <ul id="location-list" role="list" aria-live="polite" aria-label="篩選後的景點"></ul>
     </aside>
 
-    <!-- Map -->
     <section id="map-wrap" aria-label="互動地圖">
       <div id="map" role="application" aria-label="亞利桑那州旅遊地圖"></div>
     </section>
@@ -564,322 +512,128 @@
     /* ── Data ────────────────────────────────────────── */
     const LOCATIONS = [
       // Accommodation
-      {
-        id: 'peoria',
-        name: 'Peoria（您的住宿基地）',
-        category: 'hotel',
-        lat: 33.5806, lng: -112.2374,
-        timeFromBase: '起點',
-        icon: 'fa-house',
-        highlight: false,
-        isBase: true,
-        desc: '這次旅程的溫馨基地，位於鳳凰城北側，前往北部峽谷、Sedona 及市區看球都非常便利。'
-      },
-      {
-        id: 'courtyard-page',
-        name: 'Courtyard by Marriott Page at Lake Powell',
-        category: 'hotel',
-        lat: 36.9255, lng: -111.4725,
-        timeFromBase: '車程約 4 小時（Page 市）',
-        icon: 'fa-bed',
-        highlight: false,
-        desc: '前往羚羊峽谷與馬蹄灣的最佳連鎖飯店。設施完善、有戶外泳池，可累積 Bonvoy 積分。'
-      },
+      { id:'peoria', name:'Peoria（您的住宿基地）', category:'hotel',
+        lat:33.5806, lng:-112.2374, timeFromBase:'起點', icon:'fa-house', isBase:true,
+        desc:'這次旅程的溫馨基地，位於鳳凰城北側，前往北部峽谷、Sedona 及市區看球都非常便利。' },
+      { id:'courtyard-page', name:'Courtyard by Marriott Page at Lake Powell', category:'hotel',
+        lat:36.9255, lng:-111.4725, timeFromBase:'車程約 4 小時（Page 市）', icon:'fa-bed',
+        desc:'前往羚羊峽谷與馬蹄灣的最佳連鎖飯店。設施完善、有戶外泳池，可累積 Bonvoy 積分。' },
 
       // Attractions
-      {
-        id: 'antelope-canyon-x',
-        name: '羚羊 X 峽谷（Antelope Canyon X）',
-        category: 'attraction',
-        lat: 36.8402, lng: -111.3713,
-        timeFromBase: '車程約 4 小時（Page 市）',
-        icon: 'fa-camera',
-        highlight: true,
-        desc: '⭐ 本次重要亮點：人潮較少的隱藏版狹縫型峽谷秘境，可悠閒拍照。⚠️ 必須提前線上預約導覽。'
-      },
-      {
-        id: 'horseshoe-bend',
-        name: '馬蹄灣（Horseshoe Bend）',
-        category: 'attraction',
-        lat: 36.8791, lng: -111.5103,
-        timeFromBase: '車程約 4 小時（Page 市）',
-        icon: 'fa-water',
-        highlight: false,
-        desc: '距羚羊峽谷極近，科羅拉多河切割出 270° 壯麗懸崖大迴轉，傍晚日落時分尤為壯觀。'
-      },
-      {
-        id: 'monument-valley',
-        name: '紀念碑谷（Monument Valley）',
-        category: 'attraction',
-        lat: 36.9989, lng: -110.0984,
-        timeFromBase: '從 Page 出發約 2 小時',
-        icon: 'fa-monument',
-        highlight: false,
-        desc: '位於 AZ／UT 州界，壯觀的紅色孤峰群，美國西部牛仔電影與《阿甘正傳》的經典場景。'
-      },
-      {
-        id: 'sedona',
-        name: '塞多納（Sedona）',
-        category: 'attraction',
-        lat: 34.8697, lng: -111.7610,
-        timeFromBase: '車程約 1 小時 45 分',
-        icon: 'fa-mountain-sun',
-        highlight: false,
-        desc: '世界級紅岩景觀與靈性能量聖地。推薦 Bell Rock 或 Cathedral Rock 健行步道。'
-      },
-      {
-        id: 'jerome',
-        name: '傑羅姆（Jerome）',
-        category: 'attraction',
-        lat: 34.7489, lng: -112.1137,
-        timeFromBase: '車程約 1 小時 30 分',
-        icon: 'fa-road',
-        highlight: false,
-        desc: '89A 公路沿線的懸崖藝術小鎮，擁有絕佳視野，隨意漫步皆是風景。'
-      },
-      {
-        id: 'lake-pleasant',
-        name: '歡樂湖區域公園（Lake Pleasant）',
-        category: 'attraction',
-        lat: 33.8447, lng: -112.2742,
-        timeFromBase: '車程約 30 分鐘（備選）',
-        icon: 'fa-water',
-        highlight: false,
-        desc: 'Peoria 在地秘境，被高聳仙人掌環繞的沙漠湖泊，適合半日遊。'
-      },
-      {
-        id: 'cave-creek',
-        name: '穴溪（Cave Creek）',
-        category: 'attraction',
-        lat: 33.8334, lng: -111.9507,
-        timeFromBase: '車程約 35 分鐘（備選）',
-        icon: 'fa-hat-cowboy',
-        highlight: false,
-        desc: '充滿西部牛仔風情的小鎮，感受原汁原味的亞利桑那沙漠地貌。'
-      },
-      {
-        id: 'superstition-mountains',
-        name: '迷信山脈與 Goldfield 鬼鎮',
-        category: 'attraction',
-        lat: 33.4542, lng: -111.4795,
-        timeFromBase: '車程約 1 小時（備選）',
-        icon: 'fa-ghost',
-        highlight: false,
-        desc: '絕美鋸齒狀沙漠群山，搭配真實西部淘金小鎮，氣氛神秘有趣。'
-      },
-      {
-        id: 'hoover-dam',
-        name: '胡佛水壩（Hoover Dam）',
-        category: 'attraction',
-        lat: 36.0160, lng: -114.7377,
-        timeFromBase: '往拉斯維加斯中途點',
-        icon: 'fa-bridge-water',
-        highlight: false,
-        desc: '橫跨亞利桑那與內華達州界的宏偉工程奇蹟，往 Vegas 途中的必訪景點。'
-      },
-      {
-        id: 'kingman',
-        name: '金曼（Kingman）',
-        category: 'attraction',
-        lat: 35.1894, lng: -114.0530,
-        timeFromBase: '往拉斯維加斯中途點',
-        icon: 'fa-route',
-        highlight: false,
-        desc: '歷史性的 66 號公路重要據點，感受昔日公路旅行的浪漫氛圍。'
-      },
+      { id:'antelope-canyon-x', name:'羚羊 X 峽谷（Antelope Canyon X）', category:'attraction',
+        lat:36.8402, lng:-111.3713, timeFromBase:'車程約 4 小時（Page 市）', icon:'fa-camera', highlight:true,
+        desc:'⭐ 本次重要亮點：人潮較少的隱藏版狹縫型峽谷秘境，可悠閒拍照。⚠️ 必須提前線上預約導覽。' },
+      { id:'horseshoe-bend', name:'馬蹄灣（Horseshoe Bend）', category:'attraction',
+        lat:36.8791, lng:-111.5103, timeFromBase:'車程約 4 小時（Page 市）', icon:'fa-water',
+        desc:'距羚羊峽谷極近，科羅拉多河切割出 270° 壯麗懸崖大迴轉，傍晚日落時分尤為壯觀。' },
+      { id:'monument-valley', name:'紀念碑谷（Monument Valley）', category:'attraction',
+        lat:36.9989, lng:-110.0984, timeFromBase:'從 Page 出發約 2 小時', icon:'fa-monument',
+        desc:'位於 AZ／UT 州界，壯觀的紅色孤峰群，美國西部牛仔電影與《阿甘正傳》的經典場景。' },
+      { id:'sedona', name:'塞多納（Sedona）', category:'attraction',
+        lat:34.8697, lng:-111.7610, timeFromBase:'車程約 1 小時 45 分', icon:'fa-mountain-sun',
+        desc:'世界級紅岩景觀與靈性能量聖地。推薦 Bell Rock 或 Cathedral Rock 健行步道。' },
+      { id:'jerome', name:'傑羅姆（Jerome）', category:'attraction',
+        lat:34.7489, lng:-112.1137, timeFromBase:'車程約 1 小時 30 分', icon:'fa-road',
+        desc:'89A 公路沿線的懸崖藝術小鎮，擁有絕佳視野，隨意漫步皆是風景。' },
+      { id:'lake-pleasant', name:'歡樂湖區域公園（Lake Pleasant）', category:'attraction',
+        lat:33.8447, lng:-112.2742, timeFromBase:'車程約 30 分鐘（備選）', icon:'fa-water',
+        desc:'Peoria 在地秘境，被高聳仙人掌環繞的沙漠湖泊，適合半日遊。' },
+      { id:'cave-creek', name:'穴溪（Cave Creek）', category:'attraction',
+        lat:33.8334, lng:-111.9507, timeFromBase:'車程約 35 分鐘（備選）', icon:'fa-hat-cowboy',
+        desc:'充滿西部牛仔風情的小鎮，感受原汁原味的亞利桑那沙漠地貌。' },
+      { id:'superstition-mountains', name:'迷信山脈與 Goldfield 鬼鎮', category:'attraction',
+        lat:33.4542, lng:-111.4795, timeFromBase:'車程約 1 小時（備選）', icon:'fa-ghost',
+        desc:'絕美鋸齒狀沙漠群山，搭配真實西部淘金小鎮，氣氛神秘有趣。' },
+      { id:'hoover-dam', name:'胡佛水壩（Hoover Dam）', category:'attraction',
+        lat:36.0160, lng:-114.7377, timeFromBase:'往拉斯維加斯中途點', icon:'fa-bridge-water',
+        desc:'橫跨亞利桑那與內華達州界的宏偉工程奇蹟，往 Vegas 途中的必訪景點。' },
+      { id:'kingman', name:'金曼（Kingman）', category:'attraction',
+        lat:35.1894, lng:-114.0530, timeFromBase:'往拉斯維加斯中途點', icon:'fa-route',
+        desc:'歷史性的 66 號公路重要據點，感受昔日公路旅行的浪漫氛圍。' },
+
+      // Minor waypoints
+      { id:'montezuma-castle', name:'蒙特祖馬城堡（中繼點）', category:'attraction',
+        lat:34.6116, lng:-111.8326, timeFromBase:'往 Page 途中（距 Peoria 1.5h）', icon:'fa-campground', isMinor:true,
+        desc:'建在懸崖峭壁上的千年印地安古城遺跡。平緩易走，非常適合下車伸展的短暫休息點。' },
+      { id:'flagstaff-macys', name:"Macy's 咖啡 / 旗桿市（中繼點）", category:'coffee',
+        lat:35.1983, lng:-111.6496, timeFromBase:'往 Page 途中（距 Peoria 2h）', icon:'fa-mug-hot', isMinor:true,
+        desc:"亞利桑那北部的高山松樹城鎮。推薦到舊城區的老字號 Macy's European Coffeehouse 喝杯咖啡提神。" },
+      { id:'cameron-trading-post', name:'卡梅倫交易站（中繼點）', category:'restaurant',
+        lat:35.8761, lng:-111.4124, timeFromBase:'往 Page 途中（距 Page 1h）', icon:'fa-store', isMinor:true,
+        desc:'百年歷史的西部驛站。強烈推薦在此享用道地的「納瓦霍炸玉米餅」並逛逛印地安工藝品。' },
+      { id:'navajo-national-monument', name:'納瓦霍國家紀念區（中繼點）', category:'attraction',
+        lat:36.6782, lng:-110.5398, timeFromBase:'往紀念碑谷途中', icon:'fa-mountain', isMinor:true,
+        desc:'遊客稀少的壯闊峽谷，走一小段步道即可從懸崖眺望巨大洞穴裡的古代懸崖村莊。' },
+      { id:'kayenta-bk', name:'卡恩塔 漢堡王 / Amigo Cafe（中繼點）', category:'restaurant',
+        lat:36.7278, lng:-110.2546, timeFromBase:'進入紀念碑谷前 30 分鐘', icon:'fa-hamburger', isMinor:true,
+        desc:'進入荒野前的最後補給鎮。漢堡王內有免費的「納瓦霍密碼語者」二戰歷史展覽。' },
 
       // Art & Museums
-      {
-        id: 'heard-museum',
-        name: '赫德博物館（Heard Museum）',
-        category: 'art',
-        lat: 33.4729, lng: -112.0735,
-        timeFromBase: '車程約 35 分鐘（市區）',
-        icon: 'fa-masks-theater',
-        highlight: false,
-        desc: '全美頂尖的美洲原住民藝術與文化殿堂，典藏品精彩豐富。'
-      },
-      {
-        id: 'phx-art-museum',
-        name: '鳳凰城美術館（Phoenix Art Museum）',
-        category: 'art',
-        lat: 33.4673, lng: -112.0730,
-        timeFromBase: '車程約 35 分鐘（市區）',
-        icon: 'fa-palette',
-        highlight: false,
-        desc: '60 週年時尚典藏雙特展《Colorwear》現正展出中，強力推薦。'
-      },
-      {
-        id: 'taliesin-west',
-        name: '西塔里耶森（Taliesin West）',
-        category: 'art',
-        lat: 33.6063, lng: -111.8453,
-        timeFromBase: '車程約 35 分鐘（Scottsdale）',
-        icon: 'fa-building',
-        highlight: false,
-        desc: '建築大師法蘭克·洛伊·萊特的沙漠有機建築，UNESCO 世界文化遺產。'
-      },
+      { id:'heard-museum', name:'赫德博物館（Heard Museum）', category:'art',
+        lat:33.4729, lng:-112.0735, timeFromBase:'車程約 35 分鐘（市區）', icon:'fa-masks-theater',
+        desc:'全美頂尖的美洲原住民藝術與文化殿堂，典藏品精彩豐富。' },
+      { id:'phx-art-museum', name:'鳳凰城美術館（Phoenix Art Museum）', category:'art',
+        lat:33.4673, lng:-112.0730, timeFromBase:'車程約 35 分鐘（市區）', icon:'fa-palette',
+        desc:'60 週年時尚典藏雙特展《Colorwear》現正展出中，強力推薦。' },
+      { id:'taliesin-west', name:'西塔里耶森（Taliesin West）', category:'art',
+        lat:33.6063, lng:-111.8453, timeFromBase:'車程約 35 分鐘（Scottsdale）', icon:'fa-building',
+        desc:'建築大師法蘭克·洛伊·萊特的沙漠有機建築，UNESCO 世界文化遺產。' },
 
       // Restaurants
-      {
-        id: 'el-tapatio',
-        name: 'El Tapatio',
-        category: 'restaurant',
-        lat: 36.9172, lng: -111.4583,
-        timeFromBase: '位於 Page 市',
-        icon: 'fa-pepper-hot',
-        highlight: false,
-        desc: '超人氣墨西哥餐廳，氣氛熱鬧。法西塔（Fajitas）與超大杯瑪格麗特是必點招牌。'
-      },
-      {
-        id: 'fiesta-mexicana',
-        name: 'Fiesta Mexicana Restaurant',
-        category: 'restaurant',
-        lat: 36.9142, lng: -111.4646,
-        timeFromBase: '位於 Page 市',
-        icon: 'fa-utensils',
-        highlight: false,
-        desc: '道地且份量飽足的墨西哥料理，抵達 Page 的第一餐首選。'
-      },
-      {
-        id: 'arrowhead-grill',
-        name: 'Arrowhead Grill',
-        category: 'restaurant',
-        lat: 33.6740, lng: -112.2223,
-        timeFromBase: '車程約 12 分鐘（Glendale）',
-        icon: 'fa-utensils',
-        highlight: false,
-        desc: 'Peoria 周邊極力推薦的高級熟成牛排館，商務晚宴或慶祝餐首選。'
-      },
-      {
-        id: 'fabio-on-fire',
-        name: 'Fabio on Fire',
-        category: 'restaurant',
-        lat: 33.6802, lng: -112.2750,
-        timeFromBase: '車程約 15 分鐘（Peoria 在地）',
-        icon: 'fa-pizza-slice',
-        highlight: false,
-        desc: '頂級義大利柴窯披薩，在地人的口袋名單。'
-      },
-      {
-        id: 'pizzeria-bianco',
-        name: 'Pizzeria Bianco',
-        category: 'restaurant',
-        lat: 33.4500, lng: -112.0658,
-        timeFromBase: '車程約 35 分鐘（鳳凰城市區）',
-        icon: 'fa-pizza-slice',
-        highlight: false,
-        desc: '全美最知名披薩名店之一，緊鄰 MLB 球場，強烈建議提前訂位。'
-      },
-      {
-        id: 'elote-cafe',
-        name: 'Elote Cafe／Mariposa',
-        category: 'restaurant',
-        lat: 34.8631, lng: -111.7629,
-        timeFromBase: '位於塞多納（Sedona）',
-        icon: 'fa-wine-glass',
-        highlight: false,
-        desc: '現代墨西哥料理搭配無敵紅岩景觀，旅途中最美的一餐（務必提前訂位）。'
-      },
+      { id:'el-tapatio', name:'El Tapatio', category:'restaurant',
+        lat:36.9172, lng:-111.4583, timeFromBase:'位於 Page 市', icon:'fa-pepper-hot',
+        desc:'超人氣墨西哥餐廳，氣氛熱鬧。法西塔（Fajitas）與超大杯瑪格麗特是必點招牌。' },
+      { id:'fiesta-mexicana', name:'Fiesta Mexicana Restaurant', category:'restaurant',
+        lat:36.9142, lng:-111.4646, timeFromBase:'位於 Page 市', icon:'fa-utensils',
+        desc:'道地且份量飽足的墨西哥料理，抵達 Page 的第一餐首選。' },
+      { id:'arrowhead-grill', name:'Arrowhead Grill', category:'restaurant',
+        lat:33.6740, lng:-112.2223, timeFromBase:'車程約 12 分鐘（Glendale）', icon:'fa-utensils',
+        desc:'Peoria 周邊極力推薦的高級熟成牛排館，商務晚宴或慶祝餐首選。' },
+      { id:'fabio-on-fire', name:'Fabio on Fire', category:'restaurant',
+        lat:33.6802, lng:-112.2750, timeFromBase:'車程約 15 分鐘（Peoria 在地）', icon:'fa-pizza-slice',
+        desc:'頂級義大利柴窯披薩，在地人的口袋名單。' },
+      { id:'pizzeria-bianco', name:'Pizzeria Bianco', category:'restaurant',
+        lat:33.4500, lng:-112.0658, timeFromBase:'車程約 35 分鐘（鳳凰城市區）', icon:'fa-pizza-slice',
+        desc:'全美最知名披薩名店之一，緊鄰 MLB 球場，強烈建議提前訂位。' },
+      { id:'elote-cafe', name:'Elote Cafe／Mariposa', category:'restaurant',
+        lat:34.8631, lng:-111.7629, timeFromBase:'位於塞多納（Sedona）', icon:'fa-wine-glass',
+        desc:'現代墨西哥料理搭配無敵紅岩景觀，旅途中最美的一餐（務必提前訂位）。' },
 
       // Coffee
-      {
-        id: 'driftwood',
-        name: 'Driftwood Coffee Co.',
-        category: 'coffee',
-        lat: 33.5815, lng: -112.2405,
-        timeFromBase: '車程約 5 分鐘（Peoria 舊城區）',
-        icon: 'fa-mug-hot',
-        highlight: false,
-        desc: '舊城區精品咖啡館，提供多家烘焙商手沖選項，旅途出發前的元氣補給站。'
-      },
-      {
-        id: 'peixoto',
-        name: 'Peixoto Coffee Roasters',
-        category: 'coffee',
-        lat: 33.3032, lng: -111.8415,
-        timeFromBase: '車程約 50 分鐘（Chandler）',
-        icon: 'fa-seedling',
-        highlight: false,
-        desc: '老闆家族在巴西自有莊園，真正的「從產地到杯子」精品咖啡體驗。'
-      },
+      { id:'driftwood', name:'Driftwood Coffee Co.', category:'coffee',
+        lat:33.5815, lng:-112.2405, timeFromBase:'車程約 5 分鐘（Peoria 舊城區）', icon:'fa-mug-hot',
+        desc:'舊城區精品咖啡館，提供多家烘焙商手沖選項，旅途出發前的元氣補給站。' },
+      { id:'peixoto', name:'Peixoto Coffee Roasters', category:'coffee',
+        lat:33.3032, lng:-111.8415, timeFromBase:'車程約 50 分鐘（Chandler）', icon:'fa-seedling',
+        desc:'老闆家族在巴西自有莊園，真正的「從產地到杯子」精品咖啡體驗。' },
 
       // Shopping
-      {
-        id: 'outlets-anthem',
-        name: 'Outlets at Anthem',
-        category: 'shopping',
-        lat: 33.8821, lng: -112.1328,
-        timeFromBase: '車程約 30 分鐘（往北）',
-        icon: 'fa-bag-shopping',
-        highlight: false,
-        desc: '前往塞多納或峽谷的順路必經，適合短暫停留掃貨。（注意：亞利桑那州無免稅）'
-      },
-      {
-        id: 'premium-outlets',
-        name: 'Phoenix Premium Outlets',
-        category: 'shopping',
-        lat: 33.2829, lng: -111.9739,
-        timeFromBase: '車程約 45 分鐘（往南 Chandler）',
-        icon: 'fa-tags',
-        highlight: false,
-        desc: '品牌齊全豐富的大型暢貨中心，喜愛購物者不容錯過。'
-      },
+      { id:'outlets-anthem', name:'Outlets at Anthem', category:'shopping',
+        lat:33.8821, lng:-112.1328, timeFromBase:'車程約 30 分鐘（往北）', icon:'fa-bag-shopping',
+        desc:'前往塞多納或峽谷的順路必經，適合短暫停留掃貨。（注意：亞利桑那州無免稅）' },
+      { id:'premium-outlets', name:'Phoenix Premium Outlets', category:'shopping',
+        lat:33.2829, lng:-111.9739, timeFromBase:'車程約 45 分鐘（往南 Chandler）', icon:'fa-tags',
+        desc:'品牌齊全豐富的大型暢貨中心，喜愛購物者不容錯過。' },
 
       // Events
-      {
-        id: 'chase-field',
-        name: '大通體育場（Chase Field）— MLB',
-        category: 'events',
-        lat: 33.4453, lng: -112.0667,
-        timeFromBase: '車程約 35 分鐘（市區）',
-        icon: 'fa-baseball',
-        highlight: false,
-        desc: '響尾蛇隊主場：4/17–19 對藍鳥、4/21–23 對白襪，現場看球氣氛熱烈。'
-      },
-      {
-        id: 'charlie-puth',
-        name: 'Charlie Puth 演唱會',
-        category: 'events',
-        lat: 33.4497, lng: -112.0811,
-        timeFromBase: '車程約 35 分鐘（市區）',
-        icon: 'fa-microphone',
-        highlight: false,
-        desc: '4/24 於 Arizona Financial Theatre 演出，流行樂迷必去。'
-      },
-      {
-        id: 'james-taylor-la',
-        name: 'James Taylor 演唱會（南加州）',
-        category: 'events',
-        lat: 34.1378, lng: -117.1856,
-        timeFromBase: '跨州行程（加州）',
-        icon: 'fa-guitar',
-        highlight: false,
-        desc: '傳奇音樂之夜：4/26（Yaamava\' Theater）或 4/28（聖地牙哥 Rady Shell 海濱戶外劇場）。'
-      },
-      {
-        id: 'sphere-vegas',
-        name: 'Sphere 巨型球體劇場（拉斯維加斯）',
-        category: 'events',
-        lat: 36.1215, lng: -115.1615,
-        timeFromBase: '車程約 4 小時 40 分（內華達州）',
-        icon: 'fa-globe',
-        highlight: false,
-        desc: 'Phish 樂團演唱會（4/18、4/23–25）或《綠野仙蹤》沉浸式電影體驗。'
-      },
-      {
-        id: 'david-byrne',
-        name: 'David Byrne 演唱會',
-        category: 'events',
-        lat: 36.1170, lng: -115.1760,
-        timeFromBase: '跨州行程（拉斯維加斯）',
-        icon: 'fa-music',
-        highlight: false,
-        desc: '4/20 凱薩宮 Colosseum，前衛搖滾傳奇的一夜獨場，千萬不要錯過。'
-      }
+      { id:'chase-field', name:'大通體育場（Chase Field）— MLB', category:'events',
+        lat:33.4453, lng:-112.0667, timeFromBase:'車程約 35 分鐘（市區）', icon:'fa-baseball',
+        desc:'響尾蛇隊主場：4/17–19 對藍鳥、4/21–23 對白襪，現場看球氣氛熱烈。' },
+      { id:'charlie-puth', name:'Charlie Puth 演唱會', category:'events',
+        lat:33.4497, lng:-112.0811, timeFromBase:'車程約 35 分鐘（市區）', icon:'fa-microphone',
+        desc:'4/24 於 Arizona Financial Theatre 演出，流行樂迷必去。' },
+      { id:'james-taylor-la', name:'James Taylor 演唱會（南加州）', category:'events',
+        lat:34.1378, lng:-117.1856, timeFromBase:'跨州行程（加州）', icon:'fa-guitar',
+        desc:"傳奇音樂之夜：4/26（Yaamava' Theater）或 4/28（聖地牙哥 Rady Shell 海濱戶外劇場）。" },
+      { id:'sphere-vegas', name:'Sphere 巨型球體劇場（拉斯維加斯）', category:'events',
+        lat:36.1215, lng:-115.1615, timeFromBase:'車程約 4 小時 40 分（內華達州）', icon:'fa-globe',
+        desc:'Phish 樂團演唱會（4/18、4/23–25）或《綠野仙蹤》沉浸式電影體驗。' },
+      { id:'david-byrne', name:'David Byrne 演唱會', category:'events',
+        lat:36.1170, lng:-115.1760, timeFromBase:'跨州行程（拉斯維加斯）', icon:'fa-music',
+        desc:'4/20 凱薩宮 Colosseum，前衛搖滾傳奇的一夜獨場，千萬不要錯過。' }
     ];
 
-    /* ── Category Config ─────────────────────────────── */
+    /* ── Category Colors ─────────────────────────────── */
     const CAT_COLOR = {
       attraction: '#b85c2a',
       art:        '#4a9dc4',
@@ -892,62 +646,55 @@
 
     /* ── State ───────────────────────────────────────── */
     let currentCat = 'all';
-    let leafletMap = null;
+    let leafletMap  = null;
     const markersMap = {};
 
-    /* ── Map Init ────────────────────────────────────── */
+    /* ── Map ─────────────────────────────────────────── */
     function initMap() {
       leafletMap = L.map('map', { zoomControl: true }).setView([34.5, -111.5], 7);
-
       L.tileLayer('https://mt1.google.com/vt/lyrs=m&hl=zh-TW&x={x}&y={y}&z={z}', {
         attribution: '&copy; <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a>',
         maxZoom: 20
       }).addTo(leafletMap);
-
       LOCATIONS.forEach(addMarker);
       fitAllVisible();
     }
 
-    function makeIcon(color, iconClass) {
+    function makeIcon(color, iconClass, isMinor) {
+      const cls  = isMinor ? 'map-pin is-minor' : 'map-pin';
+      const size = isMinor ? 24 : 34;
+      const anc  = size / 2;
       return L.divIcon({
         className: '',
-        html: `<div class="map-pin" style="background:${color}" aria-hidden="true">
-                 <i class="fa-solid ${iconClass}"></i>
-               </div>`,
-        iconSize: [34, 34],
-        iconAnchor: [17, 17],
-        popupAnchor: [0, -18]
+        html: `<div class="${cls}" style="background:${color}" aria-hidden="true">
+                 <i class="fa-solid ${iconClass}"></i></div>`,
+        iconSize: [size, size], iconAnchor: [anc, anc], popupAnchor: [0, -anc]
       });
     }
 
     function addMarker(loc) {
-      const color = CAT_COLOR[loc.category] || '#666';
+      const color  = CAT_COLOR[loc.category] || '#666';
       const marker = L.marker([loc.lat, loc.lng], {
-        icon: makeIcon(color, loc.icon),
-        title: loc.name,
-        alt: loc.name
+        icon: makeIcon(color, loc.icon, loc.isMinor), title: loc.name, alt: loc.name
       }).addTo(leafletMap);
-
       marker.bindPopup(`
         <div class="popup-title" style="color:${color}">${escHtml(loc.name)}</div>
         <div class="popup-dist"><i class="fa-solid fa-car" aria-hidden="true"></i> ${escHtml(loc.timeFromBase)}</div>
         <div class="popup-desc">${escHtml(loc.desc)}</div>
       `, { maxWidth: 260 });
-
       marker.on('click', () => scrollCardIntoView(loc.id));
       markersMap[loc.id] = marker;
     }
 
-    /* ── List Render ─────────────────────────────────── */
+    /* ── List ────────────────────────────────────────── */
     function renderList() {
       const list = document.getElementById('location-list');
       const frag = document.createDocumentFragment();
-
       const filtered = LOCATIONS.filter(loc =>
         currentCat === 'all' || loc.category === currentCat || loc.category === 'hotel'
       );
 
-      if (filtered.length === 0) {
+      if (!filtered.length) {
         const li = document.createElement('li');
         li.className = 'empty-state';
         li.innerHTML = '<i class="fa-solid fa-binoculars"></i>此分類目前沒有地點';
@@ -955,40 +702,42 @@
       } else {
         filtered.forEach(loc => {
           const color = CAT_COLOR[loc.category] || '#666';
-          const li = document.createElement('li');
+          const li    = document.createElement('li');
           li.setAttribute('role', 'listitem');
 
           const btn = document.createElement('button');
-          btn.className = [
-            'loc-card',
-            loc.isBase   ? 'is-base'      : '',
-            loc.highlight ? 'is-highlight' : ''
-          ].join(' ').trim();
-          btn.setAttribute('id', `card-${loc.id}`);
+          btn.className = ['loc-card',
+            loc.isBase    ? 'is-base'      : '',
+            loc.highlight ? 'is-highlight' : '',
+            loc.isMinor   ? 'is-minor'     : ''
+          ].filter(Boolean).join(' ');
+          btn.id = `card-${loc.id}`;
           btn.setAttribute('aria-label', `前往地圖查看：${loc.name}`);
-          btn.setAttribute('tabindex', '0');
           btn.onclick = () => focusLocation(loc.id);
+
+          const tagHtml = loc.highlight
+            ? '<span class="card-tag">⭐ 本次亮點</span>'
+            : loc.isMinor
+              ? '<span class="card-tag tag-minor"><i class="fa-solid fa-circle-pause"></i> 順路中繼點</span>'
+              : '';
 
           btn.innerHTML = `
             <div class="card-icon" style="background:${color}" aria-hidden="true">
               <i class="fa-solid ${loc.icon}"></i>
             </div>
             <div class="card-body">
-              ${loc.highlight ? '<span class="card-tag">⭐ 本次亮點</span>' : ''}
+              ${tagHtml}
               <div class="card-name">${escHtml(loc.name)}</div>
               <div class="card-distance">
                 <i class="fa-solid ${loc.isBase ? 'fa-location-dot' : 'fa-car'}" aria-hidden="true"></i>
                 ${escHtml(loc.timeFromBase)}
               </div>
               <p class="card-desc">${escHtml(loc.desc)}</p>
-            </div>
-          `;
-
+            </div>`;
           li.appendChild(btn);
           frag.appendChild(li);
         });
       }
-
       list.innerHTML = '';
       list.appendChild(frag);
     }
@@ -997,27 +746,29 @@
     function applyFilter(cat) {
       currentCat = cat;
 
-      // Update buttons
-      document.querySelectorAll('.filter-btn').forEach(btn => {
+      // Sync both filter-bar buttons and mini-icon-btn in one pass
+      document.querySelectorAll('[data-cat]').forEach(btn => {
+        if (btn.id === 'sidebar-toggle') return; // skip toggle
         const active = btn.dataset.cat === cat;
         btn.classList.toggle('active', active);
-        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        if (btn.classList.contains('filter-btn')) {
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        }
       });
 
-      // Show/hide markers
       LOCATIONS.forEach(loc => {
         const visible = cat === 'all' || loc.category === cat || loc.category === 'hotel';
-        const marker = markersMap[loc.id];
+        const marker  = markersMap[loc.id];
         if (!marker) return;
-        if (visible && !leafletMap.hasLayer(marker)) leafletMap.addLayer(marker);
-        if (!visible && leafletMap.hasLayer(marker)) leafletMap.removeLayer(marker);
+        if ( visible && !leafletMap.hasLayer(marker)) leafletMap.addLayer(marker);
+        if (!visible &&  leafletMap.hasLayer(marker)) leafletMap.removeLayer(marker);
       });
 
       renderList();
       fitAllVisible();
     }
 
-    /* ── Map Navigation ──────────────────────────────── */
+    /* ── Navigation ──────────────────────────────────── */
     function focusLocation(id) {
       const loc = LOCATIONS.find(l => l.id === id);
       if (!loc) return;
@@ -1026,20 +777,17 @@
                  : ['antelope-canyon-x', 'monument-valley'].includes(id) ? 11
                  : 13;
 
-      // Auto-collapse sidebar so map gets full attention
-      const sidebar = document.getElementById('sidebar');
+      // Auto-collapse sidebar
+      const sidebar   = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('sidebar-toggle');
       if (!sidebar.classList.contains('collapsed')) {
         sidebar.classList.add('collapsed');
-        document.getElementById('sidebar-toggle').setAttribute('aria-label', '展開側欄');
-        setTimeout(() => leafletMap && leafletMap.invalidateSize(), 360);
+        toggleBtn.setAttribute('aria-label', '展開側欄');
+        setTimeout(() => leafletMap?.invalidateSize(), 360);
       }
 
       leafletMap.flyTo([loc.lat, loc.lng], zoom, { duration: 1.2 });
-      setTimeout(() => {
-        const m = markersMap[id];
-        if (m) m.openPopup();
-      }, 1250);
-
+      setTimeout(() => markersMap[id]?.openPopup(), 1250);
       scrollCardIntoView(id);
     }
 
@@ -1047,79 +795,47 @@
       const coords = LOCATIONS
         .filter(loc => currentCat === 'all' || loc.category === currentCat || loc.category === 'hotel')
         .map(loc => [loc.lat, loc.lng]);
-      if (coords.length > 0) {
-        leafletMap.fitBounds(coords, { padding: [40, 40], maxZoom: 12 });
-      }
+      if (coords.length) leafletMap.fitBounds(coords, { padding: [40, 40], maxZoom: 12 });
     }
 
     function scrollCardIntoView(id) {
-      const card = document.getElementById(`card-${id}`);
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      document.getElementById(`card-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     /* ── Utility ─────────────────────────────────────── */
     function escHtml(str) {
       return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     /* ── Boot ────────────────────────────────────────── */
     document.addEventListener('DOMContentLoaded', () => {
-      // Filter button events (full bar)
+      // Delegated listener: filter-bar + mini icon strip
       document.getElementById('filter-bar').addEventListener('click', e => {
         const btn = e.target.closest('.filter-btn');
         if (btn) applyFilter(btn.dataset.cat);
       });
-
-      // Mini icon strip events (collapsed state)
       document.getElementById('sidebar-icons').addEventListener('click', e => {
         const btn = e.target.closest('.mini-icon-btn');
-        if (btn) {
-          applyFilter(btn.dataset.cat);
-          // sync active state in mini strip
-          document.querySelectorAll('.mini-icon-btn').forEach(b =>
-            b.classList.toggle('active', b.dataset.cat === btn.dataset.cat)
-          );
-        }
+        if (btn) applyFilter(btn.dataset.cat);
       });
 
       // Sidebar toggle
-      const sidebar = document.getElementById('sidebar');
+      const sidebar   = document.getElementById('sidebar');
       const toggleBtn = document.getElementById('sidebar-toggle');
       toggleBtn.addEventListener('click', () => {
-        const isCollapsed = sidebar.classList.toggle('collapsed');
-        toggleBtn.setAttribute('aria-label', isCollapsed ? '展開側欄' : '收折側欄');
-        // Let CSS transition settle, then fix map size
-        setTimeout(() => leafletMap && leafletMap.invalidateSize(), 360);
+        const collapsed = sidebar.classList.toggle('collapsed');
+        toggleBtn.setAttribute('aria-label', collapsed ? '展開側欄' : '收折側欄');
+        setTimeout(() => leafletMap?.invalidateSize(), 360);
       });
-
-      // Keep mini strip in sync with active filter
-      function syncMiniIcons(cat) {
-        document.querySelectorAll('.mini-icon-btn').forEach(b =>
-          b.classList.toggle('active', b.dataset.cat === cat)
-        );
-      }
-      // Wrap applyFilter to also sync mini icons
-      const _applyFilter = applyFilter;
-      window._syncedApplyFilter = (cat) => {
-        _applyFilter(cat);
-        syncMiniIcons(cat);
-      };
 
       initMap();
       renderList();
-
-      // Fix Leaflet size after layout settles
-      setTimeout(() => leafletMap && leafletMap.invalidateSize(), 300);
+      setTimeout(() => leafletMap?.invalidateSize(), 300);
     });
 
-    // Handle resize (especially mobile orientation change)
-    window.addEventListener('resize', () => {
-      if (leafletMap) leafletMap.invalidateSize();
-    });
+    window.addEventListener('resize', () => leafletMap?.invalidateSize());
   </script>
 </body>
 </html>
