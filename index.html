@@ -418,7 +418,29 @@
       font-weight: 300;
       color: #555;
       line-height: var(--lh-loose);
+      margin-bottom: 10px;
     }
+    .popup-nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 7px 0;
+      border-radius: 8px;
+      border: none;
+      background: #1a73e8;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: .02em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .15s, transform .1s;
+    }
+    .popup-nav-btn:hover  { background: #1558b0; transform: translateY(-1px); }
+    .popup-nav-btn:active { background: #0d47a1; transform: none; }
 
     /* ── Map Pins ────────────────────────────────────── */
     /*
@@ -536,28 +558,59 @@
 
     /* ── Mobile ──────────────────────────────────────── */
     @media (max-width: 768px) {
-      html, body { overflow: auto; }
-      main { flex-direction: column; overflow: visible; }
+      /* 讓整體維持全螢幕 flex 佈局，不允許頁面滾動 */
+      html, body { overflow: hidden; height: 100%; }
+      main {
+        flex-direction: column;
+        overflow: hidden;
+        height: 100%;
+      }
+
       #sidebar {
         width: 100% !important;
         min-width: 0 !important;
         max-width: none;
-        max-height: 50vh;
+        /* 預設展開：佔 45% 視口高度 */
+        flex: 0 0 45vh;
+        max-height: 45vh;
         border-right: none;
         border-bottom: 1px solid var(--sand-dark);
-        transition: max-height .35s cubic-bezier(.4,0,.2,1), opacity .25s ease;
+        transition: flex-basis .35s cubic-bezier(.4,0,.2,1),
+                    max-height   .35s cubic-bezier(.4,0,.2,1);
+        overflow: hidden;
       }
+
+      /* 收折後縮到最小，地圖自動填滿剩餘空間 */
       #sidebar.collapsed {
-        max-height: 48px;
-        width: 100% !important;
-        min-width: 0 !important;
+        flex: 0 0 44px !important;
+        max-height: 44px !important;
+        min-height: 44px;
         box-shadow: none;
       }
-      #sidebar.collapsed #sidebar-icons { display: none; }
-      #sidebar-toggle { right: 14px; top: auto; bottom: -16px; transform: none; }
-      #sidebar.collapsed #sidebar-toggle { transform: rotate(180deg); }
-      #map-wrap { height: 55vw; min-height: 300px; flex: none; }
-      #map { height: 100%; }
+      #sidebar.collapsed #filter-bar,
+      #sidebar.collapsed #location-list { opacity: 0; pointer-events: none; }
+      #sidebar.collapsed #sidebar-icons  { display: none; }
+
+      /* 地圖區域：flex:1 讓它填滿剩餘所有高度 */
+      #map-wrap {
+        flex: 1 1 0;
+        min-height: 0;
+        height: auto;
+        padding: 8px;
+      }
+      #map { height: 100%; width: 100%; }
+
+      /* Toggle 按鈕：改為置中於側欄底部 */
+      #sidebar-toggle {
+        right: 50%;
+        transform: translateX(50%);
+        top: auto;
+        bottom: -16px;
+      }
+      #sidebar.collapsed #sidebar-toggle {
+        transform: translateX(50%) rotate(180deg);
+      }
+
       .header-title h1 { font-size: 1.1rem; }
     }
     @media (max-width: 480px) {
@@ -867,11 +920,21 @@
       const marker = L.marker([loc.lat, loc.lng], {
         icon: makeIcon(loc), title: loc.name, alt: loc.name
       }).addTo(leafletMap);
+
+      // Google Maps universal link — opens in App on mobile, browser on desktop
+      const gmapUrl = `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}&travelmode=driving`;
+
       marker.bindPopup(`
         <div class="popup-title" style="color:${color}">${escHtml(loc.name)}</div>
         <div class="popup-dist"><i class="fa-solid fa-car" aria-hidden="true"></i> ${escHtml(loc.timeFromBase)}</div>
         <div class="popup-desc">${escHtml(loc.desc)}</div>
-      `, { maxWidth: 260 });
+        <a class="popup-nav-btn" href="${gmapUrl}" target="_blank" rel="noopener noreferrer"
+           aria-label="在 Google Maps 中導航至 ${escHtml(loc.name)}">
+          <i class="fa-solid fa-diamond-turn-right" aria-hidden="true"></i>
+          導航至此地點
+        </a>
+      `, { maxWidth: 270 });
+
       marker.on('click', () => scrollCardIntoView(loc.id));
       markersMap[loc.id] = marker;
     }
@@ -1045,6 +1108,8 @@
       toggleBtn.addEventListener('click', () => {
         const collapsed = sidebar.classList.toggle('collapsed');
         toggleBtn.setAttribute('aria-label', collapsed ? '展開側欄' : '收折側欄');
+        // Fire at start + after transition (350ms) to cover both paint frames
+        leafletMap?.invalidateSize();
         setTimeout(() => leafletMap?.invalidateSize(), 360);
       });
 
