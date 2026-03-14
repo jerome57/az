@@ -305,8 +305,8 @@
       transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition);
     }
     .loc-card:hover         { box-shadow: var(--shadow-card-hover); border-color: var(--clay); transform: translateY(-2px); }
-    .loc-card.is-base       { background: #eef4fb; border-color: var(--sky); }
-    .loc-card.is-highlight  { background: #fff8f3; border-color: var(--clay); }
+    .loc-card.is-base       { background: #eef4fb; border-color: #3a5fa8; }
+    .loc-card.is-highlight  { background: #fff8f3; border-color: #d95f02; }
     .loc-card.is-minor      { opacity: .88; }
     .loc-card.is-minor:hover { opacity: 1; }
 
@@ -421,27 +421,107 @@
     }
 
     /* ── Map Pins ────────────────────────────────────── */
+    /*
+     * Shape × Color dual-encoding system
+     * attraction → teardrop (標準水滴)
+     * restaurant  → rounded square (圓角方)
+     * events      → pentagon / star burst (五角)
+     * hotel       → house shape (屋形)
+     * art         → diamond (菱形)
+     * coffee      → circle with notch (小圓)
+     * shopping    → tag shape (標籤)
+     * minor       → plain small circle
+     */
     .map-pin {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      border: 3px solid #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,.28);
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      font-size: 14px;
+      font-size: 13px;
       transition: transform .15s, opacity .15s;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.35));
     }
-    .map-pin:hover { transform: scale(1.15); }
+    .map-pin:hover { transform: scale(1.18); filter: drop-shadow(0 3px 7px rgba(0,0,0,.45)); }
+
+    /* ── Teardrop (attraction) ── */
+    .map-pin.shape-drop {
+      width: 32px;
+      height: 40px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      border: 2.5px solid #fff;
+    }
+    .map-pin.shape-drop i { transform: rotate(45deg); font-size: 13px; }
+    .map-pin.shape-drop:hover { transform: rotate(-45deg) scale(1.18); }
+
+    /* ── Rounded Square (restaurant) ── */
+    .map-pin.shape-square {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 2.5px solid #fff;
+    }
+
+    /* ── Pentagon / Star (events) ── */
+    .map-pin.shape-star {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2.5px solid #fff;
+      /* outer glow ring to visually distinguish from circle */
+      box-shadow: 0 0 0 3px currentColor, 0 2px 8px rgba(0,0,0,.3);
+    }
+
+    /* ── House (hotel) ── */
+    .map-pin.shape-house {
+      width: 34px;
+      height: 34px;
+      border-radius: 50% 50% 8px 8px;
+      border: 2.5px solid #fff;
+      border-top-left-radius: 50%;
+      border-top-right-radius: 50%;
+    }
+
+    /* ── Diamond (art) ── */
+    .map-pin.shape-diamond {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 2.5px solid #fff;
+      transform: rotate(45deg);
+    }
+    .map-pin.shape-diamond i  { transform: rotate(-45deg); font-size: 12px; }
+    .map-pin.shape-diamond:hover { transform: rotate(45deg) scale(1.18); }
+
+    /* ── Small circle (coffee) ── */
+    .map-pin.shape-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2.5px solid #fff;
+    }
+
+    /* ── Tag / Hexagon (shopping) ── */
+    .map-pin.shape-tag {
+      width: 32px;
+      height: 32px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(45deg);
+      border: 2.5px solid rgba(255,255,255,.9);
+    }
+    .map-pin.shape-tag i  { transform: rotate(-45deg); font-size: 12px; }
+    .map-pin.shape-tag:hover { transform: rotate(45deg) scale(1.18); }
+
+    /* ── Minor waypoint ── */
     .map-pin.is-minor {
-      width: 24px;
-      height: 24px;
-      border-width: 2px;
-      font-size: 11px;
-      opacity: .8;
-      box-shadow: 0 2px 4px rgba(0,0,0,.2);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      font-size: 10px;
+      opacity: .78;
+      filter: drop-shadow(0 1px 3px rgba(0,0,0,.25));
     }
     .map-pin.is-minor:hover { opacity: 1; transform: scale(1.2); }
 
@@ -677,15 +757,26 @@
         desc:'4/20 凱薩宮 Colosseum，前衛搖滾傳奇的一夜獨場，千萬不要錯過。' }
     ];
 
-    /* ── Category Colors ─────────────────────────────── */
+    /* ── Category Config ─────────────────────────────── */
     const CAT_COLOR = {
-      attraction: '#b85c2a',
-      art:        '#4a9dc4',
-      restaurant: '#d4a019',
-      coffee:     '#7a6040',
-      shopping:   '#9b6bb5',
-      events:     '#c0392b',
-      hotel:      '#4a7fb5'
+      attraction: '#d95f02',   // 暖橙紅   — 壯闊自然
+      art:        '#1b7abf',   // 鮮明藍   — 藝文
+      restaurant: '#e6a817',   // 金黃     — 餐廳
+      coffee:     '#6b4c2a',   // 深棕     — 咖啡
+      shopping:   '#c040a0',   // 洋紅紫   — 購物
+      events:     '#1d9960',   // 翡翠綠   — 賽事演出
+      hotel:      '#3a5fa8'    // 深海藍   — 住宿
+    };
+
+    // Shape class per category (pairs with CSS .shape-* rules)
+    const CAT_SHAPE = {
+      attraction: 'shape-drop',
+      art:        'shape-diamond',
+      restaurant: 'shape-square',
+      coffee:     'shape-circle',
+      shopping:   'shape-tag',
+      events:     'shape-star',
+      hotel:      'shape-house'
     };
 
     /* ── State ───────────────────────────────────────── */
@@ -704,22 +795,38 @@
       fitAllVisible();
     }
 
-    function makeIcon(color, iconClass, isMinor) {
-      const cls  = isMinor ? 'map-pin is-minor' : 'map-pin';
-      const size = isMinor ? 24 : 34;
-      const anc  = size / 2;
+    function makeIcon(loc) {
+      if (loc.isMinor) {
+        const color = CAT_COLOR[loc.category] || '#888';
+        return L.divIcon({
+          className: '',
+          html: `<div class="map-pin is-minor" style="background:${color}" aria-hidden="true">
+                   <i class="fa-solid ${loc.icon}"></i></div>`,
+          iconSize: [22, 22], iconAnchor: [11, 11], popupAnchor: [0, -13]
+        });
+      }
+
+      const color = CAT_COLOR[loc.category] || '#666';
+      const shape = CAT_SHAPE[loc.category] || 'shape-circle';
+
+      // Teardrop & diamond & tag need larger hit-box due to rotation
+      const isRotated = ['shape-drop', 'shape-diamond', 'shape-tag'].includes(shape);
+      const size   = isRotated ? 42 : 38;
+      const anc    = size / 2;
+      const popY   = shape === 'shape-drop' ? -22 : -20;
+
       return L.divIcon({
         className: '',
-        html: `<div class="${cls}" style="background:${color}" aria-hidden="true">
-                 <i class="fa-solid ${iconClass}"></i></div>`,
-        iconSize: [size, size], iconAnchor: [anc, anc], popupAnchor: [0, -anc]
+        html: `<div class="map-pin ${shape}" style="background:${color};color:${color}" aria-hidden="true">
+                 <i class="fa-solid ${loc.icon}" style="color:#fff"></i></div>`,
+        iconSize: [size, size], iconAnchor: [anc, anc], popupAnchor: [0, popY]
       });
     }
 
     function addMarker(loc) {
       const color  = CAT_COLOR[loc.category] || '#666';
       const marker = L.marker([loc.lat, loc.lng], {
-        icon: makeIcon(color, loc.icon, loc.isMinor), title: loc.name, alt: loc.name
+        icon: makeIcon(loc), title: loc.name, alt: loc.name
       }).addTo(leafletMap);
       marker.bindPopup(`
         <div class="popup-title" style="color:${color}">${escHtml(loc.name)}</div>
