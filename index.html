@@ -397,6 +397,35 @@
     .card-tag.tag-minor {
       background: var(--sand-dark); color: var(--dust); font-weight: 500;
     }
+    /* ── Itinerary Day badges ────────────────────────── */
+    .card-tag.tag-day1 { background: #fde8d0; color: #c75000; }
+    .card-tag.tag-day2 { background: #fde0df; color: #b02020; }
+    .card-tag.tag-day3 { background: #ede0f5; color: #7030a8; }
+    .card-tag.tag-day4 { background: #ddeaf8; color: #1a5fa8; }
+    .popup-day-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: var(--text-xs); font-weight: 700;
+      padding: 2px 8px; border-radius: 999px;
+      margin-bottom: 6px;
+    }
+    .popup-day-badge.day1 { background: #fde8d0; color: #c75000; }
+    .popup-day-badge.day2 { background: #fde0df; color: #b02020; }
+    .popup-day-badge.day3 { background: #ede0f5; color: #7030a8; }
+    .popup-day-badge.day4 { background: #ddeaf8; color: #1a5fa8; }
+
+    /* ── Itinerary filter button ─────────────────────── */
+    .filter-btn.filter-itinerary {
+      border-color: #7030a8;
+      color: #7030a8;
+    }
+    .filter-btn.filter-itinerary.active {
+      background: #7030a8; color: #fff; border-color: #7030a8;
+    }
+
+    /* ── Legend itinerary row ────────────────────────── */
+    .legend-day-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
 
     /* ── Map ─────────────────────────────────────────── */
     #map-wrap { flex: 1; position: relative; padding: 10px; min-width: 0; }
@@ -585,6 +614,66 @@
     }
     .empty-state i { font-size: 2rem; margin-bottom: 10px; opacity: .4; display: block; }
 
+    /* ── Itinerary Day Badges ────────────────────────── */
+    :root {
+      --day1: #e07020;   /* 橘  — Peoria → Page */
+      --day2: #b83030;   /* 磚紅 — Page → 紀念碑谷 */
+      --day3: #7040b0;   /* 紫  — 紀念碑谷 → Vegas */
+      --day4: #2060a0;   /* 藍  — Vegas → Peoria */
+    }
+    .card-day {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: var(--text-xs); font-weight: 700;
+      padding: 2px 7px; border-radius: 999px;
+      color: #fff; letter-spacing: .02em; margin-bottom: 3px;
+    }
+    .card-day.day-1 { background: var(--day1); }
+    .card-day.day-2 { background: var(--day2); }
+    .card-day.day-3 { background: var(--day3); }
+    .card-day.day-4 { background: var(--day4); }
+
+    /* popup day badge */
+    .popup-day {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: var(--text-xs); font-weight: 700;
+      padding: 2px 8px; border-radius: 999px;
+      color: #fff; margin-bottom: 7px;
+    }
+    .popup-day.day-1 { background: var(--day1); }
+    .popup-day.day-2 { background: var(--day2); }
+    .popup-day.day-3 { background: var(--day3); }
+    .popup-day.day-4 { background: var(--day4); }
+
+    /* Polyline tooltip */
+    .itinerary-tooltip {
+      background: var(--dusk) !important;
+      border: none !important;
+      color: var(--sand) !important;
+      font-family: var(--font-body) !important;
+      font-size: var(--text-xs) !important;
+      font-weight: 600 !important;
+      padding: 4px 10px !important;
+      border-radius: 6px !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25) !important;
+    }
+    .itinerary-tooltip::before { display: none !important; }
+
+    /* Westin — 備選住宿 subtle style */
+    .loc-card.is-alt-hotel { opacity: .7; border-style: dashed; }
+    .loc-card.is-alt-hotel:hover { opacity: 1; }
+
+    /* itinerary filter button special style */
+    .filter-itinerary.active {
+      background: linear-gradient(90deg, var(--day1), var(--day2), var(--day3)) !important;
+      border-color: transparent !important;
+    }
+
+    /* itinerary filter button special style */
+    .filter-itinerary.active {
+      background: linear-gradient(90deg, var(--day1), var(--day2), var(--day3)) !important;
+      border-color: transparent !important;
+    }
+
     /* ── Mobile ──────────────────────────────────────── */
     @media (max-width: 768px) {
       html, body { overflow: hidden; height: 100%; }
@@ -668,6 +757,7 @@
         <button class="mini-icon-btn" data-cat="shopping">🛍️<span class="mini-tooltip">購物</span></button>
         <button class="mini-icon-btn" data-cat="events">🎟️<span class="mini-tooltip">賽事演出</span></button>
         <button class="mini-icon-btn" data-cat="hotel">🏨<span class="mini-tooltip">住宿</span></button>
+        <button class="mini-icon-btn" data-cat="itinerary">🔴<span class="mini-tooltip">環線行程</span></button>
       </div>
 
       <!-- Filter bar with count badges (#2) -->
@@ -680,6 +770,7 @@
         <button class="filter-btn"        data-cat="shopping"   aria-pressed="false">🛍️ 購物</button>
         <button class="filter-btn"        data-cat="events"     aria-pressed="false">🎟️ 賽事演出</button>
         <button class="filter-btn"        data-cat="hotel"      aria-pressed="false">🏨 住宿</button>
+        <button class="filter-btn filter-itinerary" data-cat="itinerary" aria-pressed="false">🔴 環線行程</button>
       </nav>
 
       <!-- List -->
@@ -717,17 +808,33 @@
         desc:'這次旅程的溫馨基地，位於鳳凰城北側，前往北部峽谷、Sedona 及市區看球都非常便利。' },
       { id:'courtyard-page', name:'Courtyard by Marriott Page at Lake Powell', category:'hotel',
         lat:36.9255, lng:-111.4725, timeFromBase:'車程約 4 小時（Page 市）', icon:'fa-bed',
-        desc:'前往羚羊峽谷與馬蹄灣的最佳連鎖飯店。設施完善、有戶外泳池，可累積 Bonvoy 積分。' },
+        itineraryDay: 1,
+        desc:'前往羚羊峽谷與馬蹄灣的最佳連鎖飯店。設施完善、有戶外泳池，可累積 Bonvoy 積分。Night 1 住宿。' },
+      { id:'view-hotel', name:'The View Hotel（紀念碑谷）', category:'hotel',
+        lat:36.9947, lng:-110.1012, timeFromBase:'位於紀念碑谷公園內', icon:'fa-bed',
+        itineraryDay: 2,
+        desc:'紀念碑谷唯一公園內飯店，每間客房均有私人陽台直面岩柱群，可在床上欣賞日出。Night 2 住宿。⚠️ 建議提前致電訂房：855-684-3407' },
+      { id:'fairfield-vegas', name:'Fairfield Inn Las Vegas Convention Center', category:'hotel',
+        lat:36.1302, lng:-115.1499, timeFromBase:'車程約 4 小時 40 分（Las Vegas）', icon:'fa-bed',
+        itineraryDay: 3,
+        desc:'Marriott Bonvoy 旗下實惠首選，含免費熱早餐。步行可達 Sphere（約 15 分鐘）與 Caesars Palace（David Byrne 演唱會場地）。Night 3 住宿。' },
+      { id:'westin-vegas', name:'The Westin Las Vegas Hotel & Spa', category:'hotel',
+        lat:36.1157, lng:-115.1690, timeFromBase:'車程約 4 小時 40 分（Las Vegas）', icon:'fa-hotel',
+        isMinor: true, isAltHotel: true,
+        desc:'備選・Westin 品牌，價位較高。無賭場、步行 8 分鐘到 Sphere，房間可欣賞 Sphere 光影秀。Bonvoy 高等級會員可享免費早餐。' },
 
       // Attractions
       { id:'antelope-canyon-x', name:'羚羊 X 峽谷（Antelope Canyon X）', category:'attraction',
         lat:36.8402, lng:-111.3713, timeFromBase:'車程約 4 小時（Page 市）', icon:'fa-camera', highlight:true,
+        itineraryDay: 1,
         desc:'⭐ 本次重要亮點：人潮較少的隱藏版狹縫型峽谷秘境，可悠閒拍照。⚠️ 必須提前線上預約導覽。' },
       { id:'horseshoe-bend', name:'馬蹄灣（Horseshoe Bend）', category:'attraction',
         lat:36.8791, lng:-111.5103, timeFromBase:'車程約 4 小時（Page 市）', icon:'fa-water',
-        desc:'距羚羊峽谷極近，科羅拉多河切割出 270° 壯麗懸崖大迴轉，傍晚日落時分尤為壯觀。' },
+        itineraryDay: 2,
+        desc:'距羚羊峽谷極近，科羅拉多河切割出 270° 壯麗懸崖大迴轉。建議 Day 2 清晨日出時前往。' },
       { id:'monument-valley', name:'紀念碑谷（Monument Valley）', category:'attraction',
         lat:36.9989, lng:-110.0984, timeFromBase:'從 Page 出發約 2 小時', icon:'fa-monument',
+        itineraryDay: 2,
         desc:'位於 AZ／UT 州界，壯觀的紅色孤峰群，美國西部牛仔電影與《阿甘正傳》的經典場景。' },
       { id:'sedona', name:'塞多納（Sedona）', category:'attraction',
         lat:34.8697, lng:-111.7610, timeFromBase:'車程約 1 小時 45 分', icon:'fa-mountain-sun',
@@ -746,9 +853,11 @@
         desc:'絕美鋸齒狀沙漠群山，搭配真實西部淘金小鎮，氣氛神秘有趣。' },
       { id:'hoover-dam', name:'胡佛水壩（Hoover Dam）', category:'attraction',
         lat:36.0160, lng:-114.7377, timeFromBase:'往拉斯維加斯中途點', icon:'fa-bridge-water',
+        itineraryDay: 3,
         desc:'橫跨亞利桑那與內華達州界的宏偉工程奇蹟，往 Vegas 途中的必訪景點。' },
       { id:'kingman', name:'金曼（Kingman）', category:'attraction',
         lat:35.1894, lng:-114.0530, timeFromBase:'往拉斯維加斯中途點', icon:'fa-route',
+        itineraryDay: 3,
         desc:'歷史性的 66 號公路重要據點，感受昔日公路旅行的浪漫氛圍。' },
 
       // Peoria local attractions (new)
@@ -1010,6 +1119,9 @@
       const dateBadge = loc.eventDate
         ? `<div class="popup-date"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i>${escHtml(loc.eventDate)}</div>`
         : '';
+      const dayBadge = loc.itineraryDay
+        ? `<div class="popup-day day-${loc.itineraryDay}"><i class="fa-solid fa-route" aria-hidden="true"></i> Day ${loc.itineraryDay}</div>`
+        : '';
 
       const marker = L.marker([loc.lat, loc.lng], {
         icon: makeIcon(loc), title: loc.name, alt: loc.name
@@ -1018,7 +1130,7 @@
       marker.bindPopup(`
         <div class="popup-title" style="color:${color}">${escHtml(loc.name)}</div>
         <div class="popup-dist"><i class="fa-solid fa-car" aria-hidden="true"></i> ${escHtml(loc.timeFromBase)}</div>
-        ${dateBadge}
+        ${dayBadge}${dateBadge}
         <div class="popup-desc">${escHtml(loc.desc)}</div>
         <div class="popup-nav-row">
           <a class="popup-nav-btn btn-gmap" href="${gmapUrl}" target="_blank" rel="noopener noreferrer"
@@ -1076,20 +1188,59 @@
       });
     }
 
-    /* ── List (#2 #6 #8) ─────────────────────────────── */
+    /* ── List ────────────────────────────────────────── */
     function renderList() {
       const list = document.getElementById('location-list');
       list.innerHTML = '';
 
+      const isItinerary = currentCat === 'itinerary';
+
+      // ── Itinerary mode: group by day ─────────────────
+      if (isItinerary) {
+        const dayColors = { 1:'var(--day1)', 2:'var(--day2)', 3:'var(--day3)', 4:'var(--day4)' };
+        const dayNames  = { 1:'Day 1・Peoria → Page', 2:'Day 2・Page → 紀念碑谷', 3:'Day 3・紀念碑谷 → Vegas', 4:'Day 4・回程 Vegas → Peoria' };
+        [1,2,3,4].forEach(day => {
+          const locs = LOCATIONS.filter(l => l.itineraryDay === day);
+          if (!locs.length && day !== 4) return;
+
+          const lbl = document.createElement('li');
+          lbl.className = 'list-section-label';
+          lbl.style.cssText = `color:${dayColors[day]};border-top-color:${dayColors[day]};`;
+          lbl.innerHTML = `<i class="fa-solid fa-route"></i> ${dayNames[day]}`;
+          list.appendChild(lbl);
+
+          if (day === 4) {
+            const note = document.createElement('li');
+            note.style.cssText = 'font-size:.72rem;color:var(--dust);padding:6px 10px;';
+            note.textContent = '沿 US-93 → I-40 → I-17 直接回 Peoria，車程約 4 小時。';
+            list.appendChild(note);
+          } else {
+            locs.forEach(loc => appendCard(list, loc));
+          }
+        });
+
+        // Alt hotel section
+        const alts = LOCATIONS.filter(l => l.isAltHotel);
+        if (alts.length) {
+          const lbl = document.createElement('li');
+          lbl.className = 'list-section-label';
+          lbl.textContent = '🏨 備選住宿';
+          list.appendChild(lbl);
+          alts.forEach(loc => appendCard(list, loc));
+        }
+        return;
+      }
+
+      // ── Normal mode ───────────────────────────────────
       const isFiltered = currentCat !== 'all';
       const primary = LOCATIONS.filter(loc =>
-        !loc.isMinor && (currentCat === 'all' || loc.category === currentCat || loc.category === 'hotel')
+        !loc.isMinor && !loc.isAltHotel &&
+        (currentCat === 'all' || loc.category === currentCat || loc.category === 'hotel')
       );
       const minor = LOCATIONS.filter(loc =>
         loc.isMinor && (currentCat === 'all' || loc.category === currentCat)
       );
 
-      // #2 — explain "住宿 always visible" only when filtering
       if (isFiltered && currentCat !== 'hotel') {
         const hotels = primary.filter(l => l.category === 'hotel');
         if (hotels.length) {
@@ -1109,7 +1260,6 @@
         primary.forEach(loc => appendCard(list, loc));
       }
 
-      // #6 — minor waypoints collapsible section
       if (minor.length) {
         const lbl = document.createElement('li');
         lbl.className = 'list-section-label';
@@ -1139,7 +1289,6 @@
         });
       }
 
-      // #2 — "住宿始終顯示" note when a non-hotel filter is active
       if (isFiltered && currentCat !== 'hotel') {
         const hotels = primary.filter(l => l.category === 'hotel');
         if (hotels.length) {
@@ -1158,21 +1307,30 @@
 
       const btn = document.createElement('button');
       btn.className = ['loc-card',
-        loc.isBase    ? 'is-base'      : '',
-        loc.highlight ? 'is-highlight' : '',
-        loc.isMinor   ? 'is-minor'     : ''
+        loc.isBase      ? 'is-base'      : '',
+        loc.highlight   ? 'is-highlight' : '',
+        loc.isMinor     ? 'is-minor'     : '',
+        loc.isAltHotel  ? 'is-alt-hotel' : ''
       ].filter(Boolean).join(' ');
       btn.id = `card-${loc.id}`;
       btn.setAttribute('aria-label', `前往地圖查看：${loc.name}`);
       btn.onclick = () => focusLocation(loc.id);
 
+      // Tag row: highlight / minor / alt-hotel
       const tagHtml = loc.highlight
         ? '<span class="card-tag">⭐ 本次亮點</span>'
         : loc.isMinor
           ? '<span class="card-tag tag-minor"><i class="fa-solid fa-circle-pause"></i> 順路中繼點</span>'
-          : '';
+          : loc.isAltHotel
+            ? '<span class="card-tag tag-minor">🏨 備選住宿</span>'
+            : '';
 
-      // #8 — eventDate badge
+      // Day badge
+      const dayBadge = loc.itineraryDay
+        ? `<span class="card-day day-${loc.itineraryDay}"><i class="fa-solid fa-route" aria-hidden="true"></i> Day ${loc.itineraryDay}</span>`
+        : '';
+
+      // Event date badge
       const dateBadge = loc.eventDate
         ? `<span class="card-date"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i>${escHtml(loc.eventDate)}</span>`
         : '';
@@ -1182,7 +1340,7 @@
           <i class="fa-solid ${loc.icon}"></i>
         </div>
         <div class="card-body">
-          ${tagHtml}
+          ${tagHtml}${dayBadge}
           <div class="card-name">${escHtml(loc.name)}</div>
           <div class="card-meta">
             <span class="card-distance">
@@ -1197,9 +1355,42 @@
       container.appendChild(li);
     }
 
+    /* ── Itinerary Polyline ──────────────────────────── */
+    const ITINERARY_DAYS = [
+      { day: 1, color: '#e07020', ids: ['peoria','courtyard-page','antelope-canyon-x','horseshoe-bend'] },
+      { day: 2, color: '#b83030', ids: ['horseshoe-bend','monument-valley','view-hotel'] },
+      { day: 3, color: '#7040b0', ids: ['monument-valley','kingman','hoover-dam','fairfield-vegas'] },
+      { day: 4, color: '#2060a0', ids: ['fairfield-vegas','peoria'] }
+    ];
+    const DAY_LABEL = { 1:'Day 1・Peoria → Page', 2:'Day 2・Page → 紀念碑谷', 3:'Day 3・紀念碑谷 → Vegas', 4:'Day 4・Vegas → Peoria' };
+    let polylines = [];
+
+    function showPolylines() {
+      hidePolylines();
+      ITINERARY_DAYS.forEach(({ day, color, ids }) => {
+        const coords = ids
+          .map(id => LOCATIONS.find(l => l.id === id))
+          .filter(Boolean)
+          .map(l => [l.lat, l.lng]);
+        const pl = L.polyline(coords, {
+          color, weight: 3.5, opacity: .75,
+          dashArray: '8 6', lineJoin: 'round'
+        }).addTo(leafletMap);
+        pl.bindTooltip(DAY_LABEL[day], { sticky: true, className: 'itinerary-tooltip' });
+        polylines.push(pl);
+      });
+    }
+
+    function hidePolylines() {
+      polylines.forEach(pl => leafletMap.removeLayer(pl));
+      polylines = [];
+    }
+
     /* ── Filter ──────────────────────────────────────── */
     function applyFilter(cat) {
       currentCat = cat;
+      const isItinerary = cat === 'itinerary';
+
       document.querySelectorAll('[data-cat]').forEach(btn => {
         if (btn.id === 'sidebar-toggle') return;
         const active = btn.dataset.cat === cat;
@@ -1209,15 +1400,30 @@
         }
       });
 
-      // Show/hide in cluster (#1)
+      // Show/hide polylines
+      if (isItinerary) { showPolylines(); } else { hidePolylines(); }
+
+      // Show/hide markers
       clusterGroup.clearLayers();
       LOCATIONS.forEach(loc => {
-        const visible = cat === 'all' || loc.category === cat || loc.category === 'hotel';
+        let visible;
+        if (isItinerary) {
+          visible = !!loc.itineraryDay || loc.isAltHotel;
+        } else {
+          visible = cat === 'all' || loc.category === cat || loc.category === 'hotel';
+        }
         if (visible) clusterGroup.addLayer(markersMap[loc.id]);
       });
 
       renderList();
-      fitAllVisible();
+
+      // Fit bounds
+      if (isItinerary) {
+        const coords = LOCATIONS.filter(l => l.itineraryDay || l.isAltHotel).map(l => [l.lat, l.lng]);
+        if (coords.length) leafletMap.fitBounds(coords, { padding: [40,40], maxZoom: 12 });
+      } else {
+        fitAllVisible();
+      }
     }
 
     /* ── Navigation ──────────────────────────────────── */
