@@ -531,12 +531,14 @@
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 22px;
+      font-size: 26px;       /* larger for easier tap */
       line-height: 1;
-      padding: 2px;
+      padding: 4px 3px;
       color: #d0c0a8;
       transition: color .1s, transform .1s;
       -webkit-tap-highlight-color: transparent;
+      min-width: 44px;       /* iOS HIG tap target */
+      text-align: center;
     }
     .popup-star:hover,
     .popup-star.hovered { color: #f5a623; transform: scale(1.15); }
@@ -901,43 +903,43 @@
 
       // Minor waypoints
       { id:'montezuma-castle', name:'蒙特祖馬城堡', category:'attraction',
-        lat:34.6116, lng:-111.8326, timeFromBase:'往 Page 途中（距 Peoria 1.5h）', icon:'fa-campground', isMinor:true,
+        lat:34.6116, lng:-111.8326, timeFromBase:'往 Page 途中（距 Peoria 1.5h）', icon:'fa-campground', isMinor:true, minorLabel:'休息點',
         desc:'建在懸崖峭壁上的千年印地安古城遺跡。平緩易走，非常適合下車伸展的短暫休息點。' },
       { id:'flagstaff-macys', name:"Macy's 咖啡 / 旗桿市", category:'coffee',
-        lat:35.1983, lng:-111.6496, timeFromBase:'往 Page 途中（距 Peoria 2h）', icon:'fa-mug-hot', isMinor:true,
+        lat:35.1983, lng:-111.6496, timeFromBase:'往 Page 途中（距 Peoria 2h）', icon:'fa-mug-hot', isMinor:true, minorLabel:'咖啡補給',
         desc:"亞利桑那北部的高山松樹城鎮。推薦到舊城區的老字號 Macy's European Coffeehouse 喝杯咖啡提神。" },
       { id:'cameron-trading-post', name:'卡梅倫交易站', category:'restaurant',
-        lat:35.8761, lng:-111.4124, timeFromBase:'往 Page 途中（距 Page 1h）', icon:'fa-store', isMinor:true,
+        lat:35.8761, lng:-111.4124, timeFromBase:'往 Page 途中（距 Page 1h）', icon:'fa-store', isMinor:true, minorLabel:'順路午餐',
         desc:'百年歷史的西部驛站。強烈推薦在此享用道地的「納瓦霍炸玉米餅」並逛逛印地安工藝品。' },
       { id:'navajo-national-monument', name:'納瓦霍國家紀念區', category:'attraction',
-        lat:36.6782, lng:-110.5398, timeFromBase:'往紀念碑谷途中', icon:'fa-mountain', isMinor:true,
+        lat:36.6782, lng:-110.5398, timeFromBase:'往紀念碑谷途中', icon:'fa-mountain', isMinor:true, minorLabel:'值得一看',
         desc:'遊客稀少的壯闊峽谷，走一小段步道即可從懸崖眺望巨大洞穴裡的古代懸崖村莊。' },
       { id:'kayenta-bk', name:'卡恩塔 漢堡王 / Amigo Cafe', category:'restaurant',
-        lat:36.7278, lng:-110.2546, timeFromBase:'進入紀念碑谷前 30 分鐘', icon:'fa-hamburger', isMinor:true,
+        lat:36.7278, lng:-110.2546, timeFromBase:'進入紀念碑谷前 30 分鐘', icon:'fa-hamburger', isMinor:true, minorLabel:'最後補給',
         desc:'進入荒野前的最後補給鎮。漢堡王內有免費的「納瓦霍密碼語者」二戰歷史展覽。' },
       { id:'rock-springs-cafe', name:'Rock Springs Cafe（百年手工派）', category:'restaurant',
-        lat:34.0531, lng:-112.1466, timeFromBase:'往北途中（距 Peoria 40m）', icon:'fa-cookie-bite', isMinor:true,
+        lat:34.0531, lng:-112.1466, timeFromBase:'往北途中（距 Peoria 40m）', icon:'fa-cookie-bite', isMinor:true, minorLabel:'必嚐甜點',
         desc:'從 1918 年營業至今的傳奇公路休息站。以美味的手工蘋果派與波本碧根果派聞名全美。' },
       { id:'arcosanti', name:'Arcosanti（沙漠科幻建築）', category:'art',
-        lat:34.3423, lng:-112.1008, timeFromBase:'往北途中（距 Peoria 1h）', icon:'fa-building', isMinor:true,
+        lat:34.3423, lng:-112.1008, timeFromBase:'往北途中（距 Peoria 1h）', icon:'fa-building', isMinor:true, minorLabel:'建築奇景',
         desc:'1970年代建造的實驗性生態建築城，外觀宛如科幻電影裡的沙漠基地，適合拍照與短暫探索。' },
       { id:'hadley-fruit', name:'哈德利果園（椰棗奶昔）', category:'coffee',
-        lat:33.9264, lng:-116.8155, timeFromBase:'往南加州途中（I-10 公路）', icon:'fa-ice-cream', isMinor:true,
+        lat:33.9264, lng:-116.8155, timeFromBase:'往南加州途中（I-10 公路）', icon:'fa-ice-cream', isMinor:true, minorLabel:'沙漠甜點',
         desc:'南加州公路旅行必停的傳奇休息站！在穿越炎熱沙漠後，來一杯招牌「椰棗奶昔」是人間美味。' },
       { id:'tortilla-flat', name:'Tortilla Flat（仙人掌冰淇淋）', category:'restaurant',
-        lat:33.5264, lng:-111.3897, timeFromBase:'往迷信山脈途中', icon:'fa-ice-cream', isMinor:true,
+        lat:33.5264, lng:-111.3897, timeFromBase:'往迷信山脈途中', icon:'fa-ice-cream', isMinor:true, minorLabel:'奇特體驗',
         desc:'常住人口僅 6 人的微型小鎮，擁有貼滿美鈔的西部酒吧與奇特的「粉紅色仙人掌冰淇淋」。' },
       { id:'cabazon-dinosaurs', name:'卡巴松恐龍', category:'attraction',
-        lat:33.9204, lng:-116.7727, timeFromBase:'往南加州途中（距哈德利果園極近）', icon:'fa-camera-retro', isMinor:true,
+        lat:33.9204, lng:-116.7727, timeFromBase:'往南加州途中（距哈德利果園極近）', icon:'fa-camera-retro', isMinor:true, minorLabel:'公路奇景',
         desc:'沙漠中赫然矗立的巨大恐龍雕像，無數電影取景地，美國極具代表性的「公路怪奇景點」。' },
       { id:'ostrich-ranch', name:'鴕鳥農場', category:'attraction',
-        lat:32.5976, lng:-111.3250, timeFromBase:'往南 / 圖森方向途中', icon:'fa-paw', isMinor:true,
+        lat:32.5976, lng:-111.3250, timeFromBase:'往南 / 圖森方向途中', icon:'fa-paw', isMinor:true, minorLabel:'親子體驗',
         desc:'超級好玩的荒漠農場！可親手餵食數百隻瘋狂的鴕鳥、迷你驢，甚至在沙漠中餵食魟魚。' },
       { id:'hackberry', name:'駭莓雜貨店', category:'shopping',
-        lat:35.3752, lng:-113.7226, timeFromBase:'往拉斯維加斯 / 66號公路途中', icon:'fa-gas-pump', isMinor:true,
+        lat:35.3752, lng:-113.7226, timeFromBase:'往拉斯維加斯 / 66號公路途中', icon:'fa-gas-pump', isMinor:true, minorLabel:'公路復古',
         desc:'宛如時光凍結的 1950 年代雜貨店，店外停滿老爺車與舊式加油機，復古公路感滿分。' },
       { id:'meteor-crater', name:'巴林隕石坑', category:'attraction',
-        lat:35.0278, lng:-111.0222, timeFromBase:'往東 / I-40 公路途中', icon:'fa-meteor', isMinor:true,
+        lat:35.0278, lng:-111.0222, timeFromBase:'往東 / I-40 公路途中', icon:'fa-meteor', isMinor:true, minorLabel:'地球奇觀',
         desc:'地球上保存最完好的巨大隕石撞擊坑，直徑達 1.2 公里、深達 170 公尺，視覺震撼力極強。' },
 
       // Art & Museums
@@ -1050,15 +1052,15 @@
         eventDate:'4/20',
         desc:'凱薩宮 Colosseum，前衛搖滾傳奇的一夜獨場，千萬不要錯過。' },
 
-      // Dodger Stadium — Ohtani
+      // Dodger Stadium — 大谷翔平（#3: 兩場次座標微錯開避免重疊）
       { id:'dodger-stadium-cubs', name:'Dodger Stadium — 大谷翔平・vs 小熊', category:'events',
-        lat:34.0739, lng:-118.2400, timeFromBase:'從 Las Vegas 車程約 4 小時', icon:'fa-baseball',
+        lat:34.0739, lng:-118.2400, timeFromBase:'從 Las Vegas 車程約 4 小時（跨州・加州）', icon:'fa-baseball',
         eventDate:'4/24–26',
-        desc:'道奇主場對芝加哥小熊，3 場系列賽。4/26（週日）下午 4:10 場次最推薦，當晚不影響 James Taylor 演唱會行程。大谷翔平打擊出賽率接近 100%，近距離看到翔平幾乎穩拿！' },
+        desc:'道奇主場對芝加哥小熊，3 場系列賽。⭐ 最推薦 4/26（週日）下午 4:10 場次，看完球當晚不影響 James Taylor 演唱會行程。大谷翔平打擊出賽率接近 100%，票價從 $136 起。' },
       { id:'dodger-stadium-marlins', name:'Dodger Stadium — 大谷翔平・vs 馬林魚', category:'events',
-        lat:34.0739, lng:-118.2400, timeFromBase:'從 Las Vegas 車程約 4 小時', icon:'fa-baseball',
+        lat:34.0750, lng:-118.2395, timeFromBase:'從 Las Vegas 車程約 4 小時（跨州・加州）', icon:'fa-baseball',
         eventDate:'4/27–29',
-        desc:'道奇主場對邁阿密馬林魚，3 場系列賽。4/28（週二）晚上 10:10 場次可在聖地牙哥演唱會前後安排。票價從約 $96 起，是整個系列最親民的場次。' }
+        desc:'道奇主場對邁阿密馬林魚，3 場系列賽。票價最親民，從 $96 起。4/28（週二）晚間場次可與聖地牙哥 James Taylor 演唱會前後搭配。' }
     ];
 
     /* ── Category Config ─────────────────────────────── */
@@ -1091,6 +1093,8 @@
     const markersMap = {};
 
     /* ── Rating Config ───────────────────────────────── */
+    // ⚠️ #1 — 部署前請在 GitHub repo → Issues → Labels 建立一個名為 "rating" 的 label
+    //         否則 Actions workflow 的 labels:['rating'] 步驟會失敗
     const GH_OWNER  = 'jerome57';
     const GH_REPO   = 'az';
     const _a = 'github_pat_11ABGUCTQ0wp86ynlrMQbs_';
@@ -1158,6 +1162,8 @@
     async function submitRating(locId, score, starEls) {
       const statusEl = document.getElementById(`rating-status-${locId}`);
       const sumEl    = document.getElementById(`rating-summary-${locId}`);
+      const wrap     = document.getElementById(`stars-${locId}`);
+
       starEls.forEach((s, i) => { s.classList.toggle('selected', i < score); s.disabled = true; });
       if (statusEl) { statusEl.textContent = '傳送中…'; statusEl.className = 'popup-rating-status sending'; }
       try {
@@ -1178,8 +1184,19 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         if (!ratingsData[locId]) ratingsData[locId] = [];
         ratingsData[locId].push(score);
-        if (sumEl)    sumEl.textContent = renderRatingSummary(locId);
-        if (statusEl) { statusEl.textContent = '✓ 已送出！'; statusEl.className = 'popup-rating-status success'; }
+        if (sumEl) sumEl.textContent = renderRatingSummary(locId);
+        if (statusEl) {
+          // #2 — add re-rate link after success
+          statusEl.innerHTML = '✓ 已送出！ <a href="#" style="color:var(--dust);text-decoration:underline;font-weight:400;">重新評分</a>';
+          statusEl.className = 'popup-rating-status success';
+          statusEl.querySelector('a')?.addEventListener('click', e => {
+            e.preventDefault();
+            starEls.forEach(s => { s.disabled = false; s.classList.remove('selected'); });
+            statusEl.textContent = '';
+            statusEl.className = 'popup-rating-status';
+            if (wrap) delete wrap.dataset.bound;  // allow re-binding
+          });
+        }
       } catch {
         if (statusEl) { statusEl.textContent = '傳送失敗，請稍後再試。'; statusEl.className = 'popup-rating-status error'; }
         starEls.forEach(s => { s.disabled = false; s.classList.remove('selected'); });
@@ -1261,16 +1278,37 @@
     /* ── #11 Legend ──────────────────────────────────── */
     function buildLegend() {
       const body = document.getElementById('legend-body');
+
+      // Category pins
       Object.entries(CAT_COLOR).forEach(([cat, color]) => {
         const row = document.createElement('div');
         row.className = 'legend-row'; row.setAttribute('role','listitem');
         row.innerHTML = `<span class="legend-pin" style="background:${color}"></span>${CAT_LABEL[cat] || cat}`;
         body.appendChild(row);
       });
+
+      // Itinerary day lines separator
+      const sep = document.createElement('div');
+      sep.style.cssText = 'border-top:1px solid var(--sand-dark);margin:5px 0 3px;';
+      body.appendChild(sep);
+
+      const itinLabel = document.createElement('div');
+      itinLabel.style.cssText = 'font-size:.65rem;font-weight:600;color:var(--dust);letter-spacing:.04em;text-transform:uppercase;padding:2px 0 4px;';
+      itinLabel.textContent = '環線行程';
+      body.appendChild(itinLabel);
+
+      const DAY_NAMES = { 1:'Day 1・Peoria → Page', 2:'Day 2・Page → 紀念碑谷', 3:'Day 3・紀念碑谷 → Vegas', 4:'Day 4・Vegas → Peoria' };
+      const DAY_COLORS = { 1:'#e07020', 2:'#b83030', 3:'#7040b0', 4:'#2060a0' };
+      [1,2,3,4].forEach(d => {
+        const row = document.createElement('div');
+        row.className = 'legend-row'; row.setAttribute('role','listitem');
+        row.innerHTML = `<span style="display:inline-block;width:22px;height:4px;border-radius:2px;background:${DAY_COLORS[d]};border-bottom:2px dashed rgba(255,255,255,.5);flex-shrink:0;"></span>${DAY_NAMES[d]}`;
+        body.appendChild(row);
+      });
+
       document.getElementById('legend-toggle').addEventListener('click', () => {
-        const body = document.getElementById('legend-body');
-        const btn  = document.getElementById('legend-toggle');
         const open = body.classList.toggle('open');
+        const btn  = document.getElementById('legend-toggle');
         btn.classList.toggle('open', open);
         btn.setAttribute('aria-expanded', open);
       });
@@ -1421,23 +1459,22 @@
       ].filter(Boolean).join(' ');
       btn.id = `card-${loc.id}`;
       btn.setAttribute('aria-label', `前往地圖查看：${loc.name}`);
-      btn.onclick = () => focusLocation(loc.id);
+      // #11 — addEventListener for consistency
+      btn.addEventListener('click', () => focusLocation(loc.id));
 
-      // Tag row: highlight / minor / alt-hotel
+      // #7 — use minorLabel if available for precise tag text
       const tagHtml = loc.highlight
         ? '<span class="card-tag">⭐ 本次亮點</span>'
         : loc.isMinor
-          ? '<span class="card-tag tag-minor"><i class="fa-solid fa-circle-pause"></i> 順路中繼點</span>'
+          ? `<span class="card-tag tag-minor"><i class="fa-solid fa-circle-pause"></i> ${loc.minorLabel || '順路中繼點'}</span>`
           : loc.isAltHotel
             ? '<span class="card-tag tag-minor">🏨 備選住宿</span>'
             : '';
 
-      // Day badge
       const dayBadge = loc.itineraryDay
         ? `<span class="card-day day-${loc.itineraryDay}"><i class="fa-solid fa-route" aria-hidden="true"></i> Day ${loc.itineraryDay}</span>`
         : '';
 
-      // Event date badge
       const dateBadge = loc.eventDate
         ? `<span class="card-date"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i>${escHtml(loc.eventDate)}</span>`
         : '';
@@ -1507,8 +1544,9 @@
         }
       });
 
-      // Show/hide polylines
-      if (isItinerary) { showPolylines(); } else { hidePolylines(); }
+      // #12 — always clear polylines first, then re-show if needed
+      hidePolylines();
+      if (isItinerary) showPolylines();
 
       // Show/hide markers
       clusterGroup.clearLayers();
@@ -1523,14 +1561,7 @@
       });
 
       renderList();
-
-      // Fit bounds
-      if (isItinerary) {
-        const coords = LOCATIONS.filter(l => l.itineraryDay || l.isAltHotel).map(l => [l.lat, l.lng]);
-        if (coords.length) leafletMap.fitBounds(coords, { padding: [40,40], maxZoom: 12 });
-      } else {
-        fitAllVisible();
-      }
+      fitAllVisible();  // #10 — unified, mode-aware
     }
 
     /* ── Navigation ──────────────────────────────────── */
@@ -1555,6 +1586,12 @@
 
     /* ── #4 Fit All ──────────────────────────────────── */
     function fitAllVisible() {
+      // #10 — respect current mode: itinerary uses its own bounds
+      if (currentCat === 'itinerary') {
+        const coords = LOCATIONS.filter(l => l.itineraryDay || l.isAltHotel).map(l => [l.lat, l.lng]);
+        if (coords.length) leafletMap.fitBounds(coords, { padding: [40,40], maxZoom: 12 });
+        return;
+      }
       const coords = LOCATIONS
         .filter(loc => currentCat === 'all' || loc.category === currentCat || loc.category === 'hotel')
         .map(loc => [loc.lat, loc.lng]);
