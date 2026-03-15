@@ -397,35 +397,6 @@
     .card-tag.tag-minor {
       background: var(--sand-dark); color: var(--dust); font-weight: 500;
     }
-    /* ── Itinerary Day badges ────────────────────────── */
-    .card-tag.tag-day1 { background: #fde8d0; color: #c75000; }
-    .card-tag.tag-day2 { background: #fde0df; color: #b02020; }
-    .card-tag.tag-day3 { background: #ede0f5; color: #7030a8; }
-    .card-tag.tag-day4 { background: #ddeaf8; color: #1a5fa8; }
-    .popup-day-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: var(--text-xs); font-weight: 700;
-      padding: 2px 8px; border-radius: 999px;
-      margin-bottom: 6px;
-    }
-    .popup-day-badge.day1 { background: #fde8d0; color: #c75000; }
-    .popup-day-badge.day2 { background: #fde0df; color: #b02020; }
-    .popup-day-badge.day3 { background: #ede0f5; color: #7030a8; }
-    .popup-day-badge.day4 { background: #ddeaf8; color: #1a5fa8; }
-
-    /* ── Itinerary filter button ─────────────────────── */
-    .filter-btn.filter-itinerary {
-      border-color: #7030a8;
-      color: #7030a8;
-    }
-    .filter-btn.filter-itinerary.active {
-      background: #7030a8; color: #fff; border-color: #7030a8;
-    }
-
-    /* ── Legend itinerary row ────────────────────────── */
-    .legend-day-dot {
-      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
-    }
 
     /* ── Map ─────────────────────────────────────────── */
     #map-wrap { flex: 1; position: relative; padding: 10px; min-width: 0; }
@@ -530,6 +501,55 @@
     .popup-nav-btn:active { filter: brightness(.9); transform: none; }
     .popup-nav-btn.btn-gmap  { background: #1a73e8; box-shadow: 0 2px 6px rgba(26,115,232,.35); }
     .popup-nav-btn.btn-tesla { background: #cc0000; box-shadow: 0 2px 6px rgba(204,0,0,.35); }
+
+    /* ── Rating UI ───────────────────────────────────── */
+    .popup-rating-wrap {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--sand-dark);
+    }
+    .popup-rating-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--dust);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .popup-rating-summary {
+      font-size: var(--text-xs);
+      color: var(--dust);
+      font-weight: 400;
+    }
+    .popup-stars {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+    .popup-star {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+      padding: 2px;
+      color: #d0c0a8;
+      transition: color .1s, transform .1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .popup-star:hover,
+    .popup-star.hovered { color: #f5a623; transform: scale(1.15); }
+    .popup-star.selected { color: #f5a623; }
+    .popup-rating-status {
+      font-size: var(--text-xs);
+      color: var(--dust);
+      min-height: 16px;
+      transition: color .2s;
+    }
+    .popup-rating-status.sending { color: #f5a623; }
+    .popup-rating-status.success { color: #1d9960; font-weight: 600; }
+    .popup-rating-status.error   { color: #c0392b; }
 
     /* ── Marker Cluster overrides ────────────────────── */
     .marker-cluster-small,
@@ -662,16 +682,12 @@
     .loc-card.is-alt-hotel { opacity: .7; border-style: dashed; }
     .loc-card.is-alt-hotel:hover { opacity: 1; }
 
-    /* itinerary filter button special style */
+    /* itinerary filter button — gradient when active */
+    .filter-itinerary { border-color: var(--day3) !important; color: var(--day3) !important; }
     .filter-itinerary.active {
       background: linear-gradient(90deg, var(--day1), var(--day2), var(--day3)) !important;
       border-color: transparent !important;
-    }
-
-    /* itinerary filter button special style */
-    .filter-itinerary.active {
-      background: linear-gradient(90deg, var(--day1), var(--day2), var(--day3)) !important;
-      border-color: transparent !important;
+      color: #fff !important;
     }
 
     /* ── Mobile ──────────────────────────────────────── */
@@ -1064,6 +1080,12 @@
     let clusterGroup = null;
     const markersMap = {};
 
+    /* ── Rating Config ───────────────────────────────── */
+    const GH_OWNER  = 'jerome57';
+    const GH_REPO   = 'az';
+    const GH_TOKEN  = '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';
+    let ratingsData = {};   // { locId: [scores…] }
+
     /* ── Map ─────────────────────────────────────────── */
     function initMap() {
       leafletMap = L.map('map', { zoomControl: true }).setView([34.5, -111.5], 7);
@@ -1112,6 +1134,46 @@
       });
     }
 
+    /* ── Rating Helpers (宣告在 addMarker 之前) ─────── */
+    function renderRatingSummary(id) {
+      const scores = ratingsData[id];
+      if (!scores || !scores.length) return '尚無評分';
+      const avg  = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
+      const full = Math.round(+avg);
+      return '★'.repeat(full) + '☆'.repeat(5 - full) + ` ${avg}（${scores.length} 人）`;
+    }
+
+    async function submitRating(locId, score, starEls) {
+      const statusEl = document.getElementById(`rating-status-${locId}`);
+      const sumEl    = document.getElementById(`rating-summary-${locId}`);
+      starEls.forEach((s, i) => { s.classList.toggle('selected', i < score); s.disabled = true; });
+      if (statusEl) { statusEl.textContent = '傳送中…'; statusEl.className = 'popup-rating-status sending'; }
+      try {
+        const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/issues`, {
+          method: 'POST',
+          headers: {
+            'Authorization':        `Bearer ${GH_TOKEN}`,
+            'Content-Type':         'application/json',
+            'Accept':               'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28'
+          },
+          body: JSON.stringify({
+            title: `rating:${locId}:${score}`,
+            body:  `{"id":"${locId}","score":${score}}`,
+            labels: ['rating']
+          })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!ratingsData[locId]) ratingsData[locId] = [];
+        ratingsData[locId].push(score);
+        if (sumEl)    sumEl.textContent = renderRatingSummary(locId);
+        if (statusEl) { statusEl.textContent = '✓ 已送出！'; statusEl.className = 'popup-rating-status success'; }
+      } catch {
+        if (statusEl) { statusEl.textContent = '傳送失敗，請稍後再試。'; statusEl.className = 'popup-rating-status error'; }
+        starEls.forEach(s => { s.disabled = false; s.classList.remove('selected'); });
+      }
+    }
+
     function addMarker(loc) {
       const color     = CAT_COLOR[loc.category] || '#666';
       const gmapUrl   = `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}&travelmode=driving`;
@@ -1144,11 +1206,44 @@
             <i class="fa-solid fa-car-side" style="color:#fff!important" aria-hidden="true"></i> Tesla
           </a>
         </div>
-      `, { maxWidth: 280 });
+        <div class="popup-rating-wrap" id="rating-wrap-${loc.id}">
+          <div class="popup-rating-label">
+            <span>你的推薦指數</span>
+            <span class="popup-rating-summary" id="rating-summary-${loc.id}">${renderRatingSummary(loc.id)}</span>
+          </div>
+          <div class="popup-stars" id="stars-${loc.id}" role="group" aria-label="評分 1 到 5 星">
+            ${[1,2,3,4,5].map(n => `<button class="popup-star" data-loc="${loc.id}" data-score="${n}" aria-label="${n} 星" title="${n} 星">★</button>`).join('')}
+          </div>
+          <div class="popup-rating-status" id="rating-status-${loc.id}"></div>
+        </div>
+      `, { maxWidth: 300, minWidth: 260 });
+
+      // Wire up star interactions — use { once: false } but track bound state to prevent accumulation
+      marker.on('popupopen', () => {
+        const wrap = document.getElementById(`stars-${loc.id}`);
+        if (!wrap || wrap.dataset.bound) return;
+        wrap.dataset.bound = '1';   // mark as bound — prevents re-binding on subsequent opens
+        const stars = wrap.querySelectorAll('.popup-star');
+
+        stars.forEach(btn => {
+          btn.addEventListener('mouseenter', () => {
+            const n = +btn.dataset.score;
+            stars.forEach((s, i) => s.classList.toggle('hovered', i < n));
+          });
+          btn.addEventListener('mouseleave', () => {
+            stars.forEach(s => s.classList.remove('hovered'));
+          });
+          btn.addEventListener('click', () => submitRating(loc.id, +btn.dataset.score, stars));
+        });
+
+        // Refresh summary with latest ratingsData
+        const sumEl = document.getElementById(`rating-summary-${loc.id}`);
+        if (sumEl) sumEl.textContent = renderRatingSummary(loc.id);
+      });
 
       marker.on('click', () => scrollCardIntoView(loc.id));
       markersMap[loc.id] = marker;
-      clusterGroup.addLayer(marker); // #1 — add to cluster
+      clusterGroup.addLayer(marker);
     }
 
     /* ── #11 Legend ──────────────────────────────────── */
@@ -1172,12 +1267,14 @@
     /* ── #2 Filter Badges ────────────────────────────── */
     function updateFilterBadges() {
       document.querySelectorAll('.filter-btn[data-cat]').forEach(btn => {
-        const cat   = btn.dataset.cat;
-        let existing = btn.querySelector('.filter-badge');
+        const cat = btn.dataset.cat;
+        // Skip itinerary — it's not a category, no meaningful count
+        if (cat === 'itinerary') return;
 
+        let existing = btn.querySelector('.filter-badge');
         const count = cat === 'all'
-          ? LOCATIONS.filter(l => !l.isMinor).length
-          : LOCATIONS.filter(l => l.category === cat && !l.isMinor).length;
+          ? LOCATIONS.filter(l => !l.isMinor && !l.isAltHotel).length
+          : LOCATIONS.filter(l => l.category === cat && !l.isMinor && !l.isAltHotel).length;
 
         if (!existing) {
           existing = document.createElement('span');
@@ -1233,6 +1330,7 @@
 
       // ── Normal mode ───────────────────────────────────
       const isFiltered = currentCat !== 'all';
+
       const primary = LOCATIONS.filter(loc =>
         !loc.isMinor && !loc.isAltHotel &&
         (currentCat === 'all' || loc.category === currentCat || loc.category === 'hotel')
@@ -1242,13 +1340,10 @@
       );
 
       if (isFiltered && currentCat !== 'hotel') {
-        const hotels = primary.filter(l => l.category === 'hotel');
-        if (hotels.length) {
-          const lbl = document.createElement('li');
-          lbl.className = 'list-section-label';
-          lbl.textContent = '主要景點';
-          list.appendChild(lbl);
-        }
+        const lbl = document.createElement('li');
+        lbl.className = 'list-section-label';
+        lbl.textContent = '主要景點';
+        list.appendChild(lbl);
       }
 
       if (!primary.length) {
@@ -1576,6 +1671,12 @@
       initMap();
       renderList();
       setTimeout(() => leafletMap?.invalidateSize(), 300);
+
+      // Load existing ratings
+      fetch('ratings.json?_=' + Date.now())
+        .then(r => r.ok ? r.json() : {})
+        .then(data => { ratingsData = data; })
+        .catch(() => {});
     });
 
     window.addEventListener('resize', () => leafletMap?.invalidateSize());
