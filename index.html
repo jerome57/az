@@ -483,21 +483,24 @@
     }
     .popup-nav-btn {
       flex: 1;
-      display: flex; align-items: center; justify-content: center; gap: 5px;
-      min-height: 40px; /* iOS HIG 44px target */
-      padding: 8px 4px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      min-height: 42px;
+      padding: 8px 6px;
       border-radius: 9px; border: none;
-      color: #fff;
-      font-family: var(--font-body); font-size: .68rem;
-      font-weight: 600; letter-spacing: .02em;
+      color: #ffffff !important;
+      font-family: var(--font-body); font-size: .74rem;
+      font-weight: 700; letter-spacing: .03em;
       cursor: pointer; text-decoration: none;
       transition: filter .15s, transform .1s;
       white-space: nowrap;
+      -webkit-font-smoothing: antialiased;
     }
-    .popup-nav-btn:hover  { filter: brightness(1.12); transform: translateY(-1px); }
-    .popup-nav-btn:active { filter: brightness(.92); transform: none; }
-    .popup-nav-btn.btn-gmap  { background: #1a73e8; }
-    .popup-nav-btn.btn-tesla { background: #cc0000; }
+    .popup-nav-btn *,
+    .popup-nav-btn i { color: #ffffff !important; }
+    .popup-nav-btn:hover  { filter: brightness(1.1); transform: translateY(-1px); }
+    .popup-nav-btn:active { filter: brightness(.9); transform: none; }
+    .popup-nav-btn.btn-gmap  { background: #1a73e8; box-shadow: 0 2px 6px rgba(26,115,232,.35); }
+    .popup-nav-btn.btn-tesla { background: #cc0000; box-shadow: 0 2px 6px rgba(204,0,0,.35); }
 
     /* ── Marker Cluster overrides ────────────────────── */
     .marker-cluster-small,
@@ -970,12 +973,14 @@
         <div class="popup-desc">${escHtml(loc.desc)}</div>
         <div class="popup-nav-row">
           <a class="popup-nav-btn btn-gmap" href="${gmapUrl}" target="_blank" rel="noopener noreferrer"
+             style="color:#fff!important"
              aria-label="在 Google Maps 導航至 ${escHtml(loc.name)}">
-            <i class="fa-solid fa-diamond-turn-right" aria-hidden="true"></i> Google Maps
+            <i class="fa-solid fa-diamond-turn-right" style="color:#fff!important" aria-hidden="true"></i> Google Maps
           </a>
           <a class="popup-nav-btn btn-tesla" href="${teslaUrl}" target="_blank" rel="noopener noreferrer"
+             style="color:#fff!important"
              aria-label="傳送至 Tesla 導航">
-            <i class="fa-solid fa-car-side" aria-hidden="true"></i> Tesla
+            <i class="fa-solid fa-car-side" style="color:#fff!important" aria-hidden="true"></i> Tesla
           </a>
         </div>
       `, { maxWidth: 280 });
