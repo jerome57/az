@@ -1,0 +1,79 @@
+name: Save Rating
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  save-rating:
+    # Only run if issue title starts with "rating:"
+    if: startsWith(github.event.issue.title, 'rating:')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse & update ratings.json
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          # Parse JSON from issue body
+          LOC_ID=$(echo "$ISSUE_BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['id'])")
+          SCORE=$(echo  "$ISSUE_BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['score'])")
+
+          # Validate score is 1-5
+          if ! [[ "$SCORE" =~ ^[1-5]$ ]]; then
+            echo "Invalid score: $SCORE — skipping"
+            exit 0
+          fi
+
+          # Update ratings.json using Python
+          python3 - <<EOF
+          import json, os
+
+          path = "ratings.json"
+          data = {}
+          if os.path.exists(path):
+              with open(path) as f:
+                  try:
+                      data = json.load(f)
+                  except json.JSONDecodeError:
+                      data = {}
+
+          loc_id = "${LOC_ID}"
+          score  = int("${SCORE}")
+
+          if loc_id not in data:
+              data[loc_id] = []
+          data[loc_id].append(score)
+
+          with open(path, "w") as f:
+              json.dump(data, f, ensure_ascii=False, indent=2)
+
+          print(f"Saved: {loc_id} → {score}  (total: {len(data[loc_id])} ratings)")
+          EOF
+
+      - name: Commit ratings.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ratings.json
+          git diff --cached --quiet || git commit -m "chore: add rating for ${{ github.event.issue.title }}"
+          git push
+
+      - name: Close the rating issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.update({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: context.issue.number,
+              state:        'closed',
+              labels:       ['rating']
+            });
