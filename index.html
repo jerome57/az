@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="亞利桑那與猶他州春季自駕遊指南，涵蓋羚羊峽谷、紀念碑谷、Zion 5 天 4 夜環線。" />
   <meta property="og:title" content="AZ 2026 Trip" />
-  <meta property="og:description" content="以 Peoria 為基地的完整旅遊地圖，含頂級餐廳、精品咖啡、演唱會資訊。" />
+  <meta property="og:description" content="以 Peoria 為基地的完整旅遊地圖，涵蓋羚羊峽谷、紀念碑谷與 Zion 國家公園深度探索。" />
   <meta property="og:type" content="website" />
   <title>AZ 2026 Trip · 5 天環線</title>
 
@@ -1019,6 +1019,13 @@
           list.appendChild(lbl);
 
           locs.forEach(loc => appendCard(list, loc));
+
+          if (day === 5) {
+            const note = document.createElement('li');
+            note.style.cssText = 'font-size:.72rem;color:var(--dust);padding:6px 10px; line-height: 1.5;';
+            note.innerHTML = '<strong>⚠️ 路徑修正提示：</strong>回程請走 UT-9 接 US-89 南下，至 Flagstaff 轉 I-17 返回 Peoria（約 6 小時）。<br>圖表標示的 <code>I-15 → I-40</code> 為無效路徑，兩者在此區間完全不交會，請勿採用以免嚴重繞路。';
+            list.appendChild(note);
+          }
         });
 
         const alts = LOCATIONS.filter(l => l.isAltHotel);
