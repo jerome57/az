@@ -1225,6 +1225,27 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      (async () => {
+        const el = document.getElementById('update-time');
+        if (!el) return;
+        try {
+          const res = await fetch('version.json?_=' + Date.now());
+          if (!res.ok) throw new Error();
+          const { updated_utc } = await res.json();
+          const d = new Date(updated_utc);
+          const pad = n => String(n).padStart(2, '0');
+          const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+          el.textContent = `${mo} ${d.getDate()}, ${d.getFullYear()} · ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+          el.setAttribute('datetime', d.toISOString());
+        } catch {
+          const d = new Date(document.lastModified);
+          const pad = n => String(n).padStart(2, '0');
+          const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+          el.textContent = `${mo} ${d.getDate()}, ${d.getFullYear()} · ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+          el.setAttribute('datetime', d.toISOString());
+        }
+      })();
+
       document.getElementById('filter-bar').addEventListener('click', e => {
         const btn = e.target.closest('.filter-btn');
         if (btn) applyFilter(btn.dataset.cat);
