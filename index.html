@@ -3,28 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="亞利桑那州春季自駕遊指南，以 Peoria 為中心，涵蓋羚羊峽谷、塞多納、馬蹄灣等精選景點與行程規劃。" />
+  <meta name="description" content="亞利桑那與猶他州春季自駕遊指南，涵蓋羚羊峽谷、紀念碑谷、Zion 5 天 4 夜環線。" />
   <meta property="og:title" content="AZ 2026 Trip" />
   <meta property="og:description" content="以 Peoria 為基地的完整旅遊地圖，含頂級餐廳、精品咖啡、演唱會資訊。" />
   <meta property="og:type" content="website" />
-  <title>AZ 2026 Trip · Peoria 出發</title>
+  <title>AZ 2026 Trip · 5 天環線</title>
 
-  <!-- Fonts: font-display=swap 避免 FOUT (#12) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@600;700&display=swap&font-display=swap" rel="stylesheet" />
 
-  <!-- Leaflet + MarkerCluster (#1) -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
-    /* ── Design Tokens ───────────────────────────────── */
     :root {
       --sand:      #f5ede0;
       --sand-dark: #e8d5bc;
@@ -51,9 +45,15 @@
       --lh-loose:  1.70;
       --ls-tight:  -.02em;
       --ls-wide:   .04em;
+      
+      /* Itinerary Days Colors - 5 Days */
+      --day1: #e07020; /* 橘 */
+      --day2: #b83030; /* 磚紅 */
+      --day3: #8b5a2b; /* Zion 褐 */
+      --day4: #3a7a5a; /* 峽谷綠 */
+      --day5: #2060a0; /* 回程藍 */
     }
 
-    /* ── Reset ───────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; overflow: hidden; }
     body {
@@ -68,7 +68,6 @@
       font-feature-settings: "kern" 1, "liga" 1;
     }
 
-    /* ── Header ──────────────────────────────────────── */
     header {
       background: var(--dusk);
       color: var(--sand);
@@ -118,7 +117,6 @@
       gap: 5px;
     }
 
-    /* ── Header icon buttons (locate + fit) ─────────── */
     .header-icon-btn {
       width: 34px;
       height: 34px;
@@ -144,11 +142,8 @@
       100% { box-shadow: 0 0 0 0   rgba(184,92,42,0);  }
     }
 
-    /* ── Layout ──────────────────────────────────────── */
     main { flex: 1; display: flex; overflow: hidden; min-height: 0; }
 
-    /* ── Sidebar ─────────────────────────────────────── */
-    /* #10 — subtle top gradient strip matching header */
     #sidebar {
       width: 380px;
       min-width: 300px;
@@ -180,7 +175,6 @@
     #sidebar.collapsed #filter-bar,
     #sidebar.collapsed #location-list { opacity: 0; pointer-events: none; }
 
-    /* ── Toggle Button ───────────────────────────────── */
     #sidebar-toggle {
       position: absolute;
       top: 50%;
@@ -204,7 +198,6 @@
     #sidebar-toggle:hover { background: var(--clay); color: var(--white); }
     #sidebar.collapsed #sidebar-toggle { transform: translateY(-50%) rotate(180deg); }
 
-    /* ── Mini Icon Strip (collapsed) ─────────────────── */
     #sidebar-icons {
       display: none;
       flex-direction: column;
@@ -239,7 +232,6 @@
     }
     .mini-icon-btn:hover .mini-tooltip { opacity: 1; }
 
-    /* ── Filter Bar ──────────────────────────────────── */
     #filter-bar {
       padding: 10px 12px;
       border-bottom: 1px solid var(--sand-dark);
@@ -270,7 +262,6 @@
     .filter-btn:hover  { background: var(--sand-dark); transform: translateY(-1px); }
     .filter-btn.active { background: var(--clay); color: var(--white); border-color: var(--clay); }
 
-    /* #2 — filter badge count */
     .filter-badge {
       background: rgba(255,255,255,.3);
       color: inherit;
@@ -284,7 +275,6 @@
       color: var(--dust);
     }
 
-    /* ── Location List ───────────────────────────────── */
     #location-list {
       flex: 1; overflow-y: auto;
       padding: 10px;
@@ -296,7 +286,6 @@
     #location-list::-webkit-scrollbar { width: 5px; }
     #location-list::-webkit-scrollbar-thumb { background: var(--sand-dark); border-radius: 4px; }
 
-    /* #2 — "住宿始終顯示" notice */
     .list-section-label {
       font-size: var(--text-xs); font-weight: 600;
       color: var(--dust); letter-spacing: .04em;
@@ -307,7 +296,6 @@
     }
     .list-section-label:first-child { border-top: none; margin-top: 0; }
 
-    /* #6 — minor waypoints collapsible group */
     .minor-group-toggle {
       width: 100%;
       display: flex; align-items: center; gap: 8px;
@@ -328,7 +316,6 @@
     #minor-list { display: none; flex-direction: column; gap: 6px; }
     #minor-list.open { display: flex; }
 
-    /* ── Card ────────────────────────────────────────── */
     .loc-card {
       background: var(--white);
       border: 1.5px solid var(--sand-dark);
@@ -374,7 +361,6 @@
       padding: 2px 7px; border-radius: 999px;
       background: var(--sand); color: var(--dust);
     }
-    /* #8 — event date badge */
     .card-date {
       display: inline-flex; align-items: center; gap: 3px;
       font-size: var(--text-xs); font-weight: 700;
@@ -398,7 +384,6 @@
       background: var(--sand-dark); color: var(--dust); font-weight: 500;
     }
 
-    /* ── Map ─────────────────────────────────────────── */
     #map-wrap { flex: 1; position: relative; padding: 10px; min-width: 0; }
     #map {
       width: 100%; height: 100%;
@@ -407,7 +392,6 @@
       border: 1.5px solid var(--sand-dark);
     }
 
-    /* #11 — Map Legend */
     #map-legend {
       position: absolute;
       bottom: 24px; right: 24px;
@@ -444,7 +428,6 @@
       flex-shrink: 0;
     }
 
-    /* ── Leaflet Popup ───────────────────────────────── */
     .leaflet-popup-content-wrapper {
       border-radius: 12px !important;
       box-shadow: var(--shadow-card-hover) !important;
@@ -464,7 +447,6 @@
       color: var(--dust); margin-bottom: 6px;
       display: flex; align-items: center; gap: 4px;
     }
-    /* #8 — popup date badge */
     .popup-date {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: var(--text-xs); font-weight: 700;
@@ -477,10 +459,7 @@
       color: #555; line-height: var(--lh-loose);
       margin-bottom: 10px;
     }
-    /* #9 — nav buttons stack on mobile, row on desktop */
-    .popup-nav-row {
-      display: flex; gap: 6px;
-    }
+    .popup-nav-row { display: flex; gap: 6px; }
     .popup-nav-btn {
       flex: 1;
       display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -502,7 +481,6 @@
     .popup-nav-btn.btn-gmap  { background: #1a73e8; box-shadow: 0 2px 6px rgba(26,115,232,.35); }
     .popup-nav-btn.btn-tesla { background: #cc0000; box-shadow: 0 2px 6px rgba(204,0,0,.35); }
 
-    /* ── Rating UI ───────────────────────────────────── */
     .popup-rating-wrap {
       margin-top: 10px;
       padding-top: 10px;
@@ -522,22 +500,18 @@
       color: var(--dust);
       font-weight: 400;
     }
-    .popup-stars {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 6px;
-    }
+    .popup-stars { display: flex; gap: 4px; margin-bottom: 6px; }
     .popup-star {
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 26px;       /* larger for easier tap */
+      font-size: 26px;
       line-height: 1;
       padding: 4px 3px;
       color: #d0c0a8;
       transition: color .1s, transform .1s;
       -webkit-tap-highlight-color: transparent;
-      min-width: 44px;       /* iOS HIG tap target */
+      min-width: 44px;
       text-align: center;
     }
     .popup-star:hover,
@@ -553,7 +527,6 @@
     .popup-rating-status.success { color: #1d9960; font-weight: 600; }
     .popup-rating-status.error   { color: #c0392b; }
 
-    /* ── Marker Cluster overrides ────────────────────── */
     .marker-cluster-small,
     .marker-cluster-medium,
     .marker-cluster-large {
@@ -569,7 +542,6 @@
       font-size: 12px !important;
     }
 
-    /* ── Map Pins ────────────────────────────────────── */
     .map-pin {
       position: relative; display: flex;
       align-items: center; justify-content: center;
@@ -579,46 +551,19 @@
     }
     .map-pin:hover { transform: scale(1.18); filter: drop-shadow(0 3px 7px rgba(0,0,0,.45)); }
 
-    .map-pin.shape-drop {
-      width: 32px; height: 40px;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      border: 2.5px solid #fff;
-    }
+    .map-pin.shape-drop { width: 32px; height: 40px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2.5px solid #fff; }
     .map-pin.shape-drop i { transform: rotate(45deg); font-size: 13px; }
     .map-pin.shape-drop:hover { transform: rotate(-45deg) scale(1.18); }
 
-    .map-pin.shape-square {
-      width: 34px; height: 34px;
-      border-radius: 8px; border: 2.5px solid #fff;
-    }
-    .map-pin.shape-star {
-      width: 36px; height: 36px;
-      border-radius: 50%; border: 2.5px solid #fff;
-      box-shadow: 0 0 0 3px currentColor, 0 2px 8px rgba(0,0,0,.3);
-    }
-    .map-pin.shape-house {
-      width: 34px; height: 34px;
-      border-radius: 50% 50% 8px 8px; border: 2.5px solid #fff;
-    }
-    .map-pin.shape-diamond {
-      width: 30px; height: 30px;
-      border-radius: 6px; border: 2.5px solid #fff;
-      transform: rotate(45deg);
-    }
+    .map-pin.shape-square { width: 34px; height: 34px; border-radius: 8px; border: 2.5px solid #fff; }
+    .map-pin.shape-star { width: 36px; height: 36px; border-radius: 50%; border: 2.5px solid #fff; box-shadow: 0 0 0 3px currentColor, 0 2px 8px rgba(0,0,0,.3); }
+    .map-pin.shape-house { width: 34px; height: 34px; border-radius: 50% 50% 8px 8px; border: 2.5px solid #fff; }
+    .map-pin.shape-diamond { width: 30px; height: 30px; border-radius: 6px; border: 2.5px solid #fff; transform: rotate(45deg); }
     .map-pin.shape-diamond i  { transform: rotate(-45deg); font-size: 12px; }
     .map-pin.shape-diamond:hover { transform: rotate(45deg) scale(1.18); }
 
-    .map-pin.shape-circle {
-      width: 32px; height: 32px;
-      border-radius: 50%; border: 2.5px solid #fff;
-    }
-    .map-pin.shape-tag {
-      width: 32px; height: 32px;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(45deg);
-      border: 2.5px solid rgba(255,255,255,.9);
-    }
+    .map-pin.shape-circle { width: 32px; height: 32px; border-radius: 50%; border: 2.5px solid #fff; }
+    .map-pin.shape-tag { width: 32px; height: 32px; border-radius: 50% 50% 50% 0; transform: rotate(45deg); border: 2.5px solid rgba(255,255,255,.9); }
     .map-pin.shape-tag i  { transform: rotate(-45deg); font-size: 12px; }
     .map-pin.shape-tag:hover { transform: rotate(45deg) scale(1.18); }
 
@@ -629,20 +574,9 @@
     }
     .map-pin.is-minor:hover { opacity: 1; transform: scale(1.2); }
 
-    /* ── Empty State ─────────────────────────────────── */
-    .empty-state {
-      text-align: center; padding: 40px 20px;
-      color: var(--dust); font-size: var(--text-sm);
-    }
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--dust); font-size: var(--text-sm); }
     .empty-state i { font-size: 2rem; margin-bottom: 10px; opacity: .4; display: block; }
 
-    /* ── Itinerary Day Badges ────────────────────────── */
-    :root {
-      --day1: #e07020;   /* 橘  — Peoria → Page */
-      --day2: #b83030;   /* 磚紅 — Page → 紀念碑谷 */
-      --day3: #7040b0;   /* 紫  — 紀念碑谷 → Vegas */
-      --day4: #2060a0;   /* 藍  — Vegas → Peoria */
-    }
     .card-day {
       display: inline-flex; align-items: center; gap: 3px;
       font-size: var(--text-xs); font-weight: 700;
@@ -653,8 +587,8 @@
     .card-day.day-2 { background: var(--day2); }
     .card-day.day-3 { background: var(--day3); }
     .card-day.day-4 { background: var(--day4); }
+    .card-day.day-5 { background: var(--day5); }
 
-    /* popup day badge */
     .popup-day {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: var(--text-xs); font-weight: 700;
@@ -665,8 +599,8 @@
     .popup-day.day-2 { background: var(--day2); }
     .popup-day.day-3 { background: var(--day3); }
     .popup-day.day-4 { background: var(--day4); }
+    .popup-day.day-5 { background: var(--day5); }
 
-    /* Polyline tooltip */
     .itinerary-tooltip {
       background: var(--dusk) !important;
       border: none !important;
@@ -680,19 +614,16 @@
     }
     .itinerary-tooltip::before { display: none !important; }
 
-    /* Westin — 備選住宿 subtle style */
     .loc-card.is-alt-hotel { opacity: .7; border-style: dashed; }
     .loc-card.is-alt-hotel:hover { opacity: 1; }
 
-    /* itinerary filter button — gradient when active */
     .filter-itinerary { border-color: var(--day3) !important; color: var(--day3) !important; }
     .filter-itinerary.active {
-      background: linear-gradient(90deg, var(--day1), var(--day2), var(--day3)) !important;
+      background: linear-gradient(90deg, var(--day1), var(--day3), var(--day5)) !important;
       border-color: transparent !important;
       color: #fff !important;
     }
 
-    /* ── Mobile ──────────────────────────────────────── */
     @media (max-width: 768px) {
       html, body { overflow: hidden; height: 100%; }
       main { flex-direction: column; overflow: hidden; height: 100%; }
@@ -701,14 +632,10 @@
         width: 100% !important; min-width: 0 !important; max-width: none;
         flex: 0 0 45vh; max-height: 45vh;
         border-right: none; border-bottom: 1px solid var(--sand-dark);
-        transition: flex-basis .35s cubic-bezier(.4,0,.2,1),
-                    max-height   .35s cubic-bezier(.4,0,.2,1);
+        transition: flex-basis .35s cubic-bezier(.4,0,.2,1), max-height .35s cubic-bezier(.4,0,.2,1);
         overflow: hidden;
       }
-      #sidebar.collapsed {
-        flex: 0 0 44px !important; max-height: 44px !important;
-        min-height: 44px; box-shadow: none;
-      }
+      #sidebar.collapsed { flex: 0 0 44px !important; max-height: 44px !important; min-height: 44px; box-shadow: none; }
       #sidebar.collapsed #filter-bar,
       #sidebar.collapsed #location-list { opacity: 0; pointer-events: none; }
       #sidebar.collapsed #sidebar-icons  { display: none; }
@@ -716,13 +643,9 @@
       #map-wrap { flex: 1 1 0; min-height: 0; height: auto; padding: 8px; }
       #map { height: 100%; width: 100%; }
 
-      #sidebar-toggle {
-        right: 50%; transform: translateX(50%);
-        top: auto; bottom: -16px;
-      }
+      #sidebar-toggle { right: 50%; transform: translateX(50%); top: auto; bottom: -16px; }
       #sidebar.collapsed #sidebar-toggle { transform: translateX(50%) rotate(180deg); }
 
-      /* #9 — stack nav buttons vertically on narrow screens */
       .popup-nav-row { flex-direction: column; }
       .popup-nav-btn { min-height: 44px; }
 
@@ -737,14 +660,12 @@
 </head>
 
 <body>
-  <!-- ── Header ── -->
   <header role="banner">
     <div class="header-title">
       <h1>AZ <span>2026 Trip</span></h1>
       <p class="header-update">Updated <time id="update-time" datetime="">—</time></p>
     </div>
     <div class="header-right">
-      <!-- #4 — fit-all button -->
       <button id="fit-btn" class="header-icon-btn" aria-label="回到全覽" title="回到全覽">
         <i class="fa-solid fa-expand" aria-hidden="true"></i>
       </button>
@@ -758,14 +679,12 @@
     </div>
   </header>
 
-  <!-- ── Main ── -->
   <main role="main">
     <aside id="sidebar" aria-label="景點列表">
       <button id="sidebar-toggle" aria-label="收折側欄" title="收折 / 展開側欄">
         <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
       </button>
 
-      <!-- Mini icon strip (collapsed only) -->
       <div id="sidebar-icons" aria-hidden="true">
         <button class="mini-icon-btn active" data-cat="all">🗺️<span class="mini-tooltip">全部</span></button>
         <button class="mini-icon-btn" data-cat="attraction">🏜️<span class="mini-tooltip">風景</span></button>
@@ -778,7 +697,6 @@
         <button class="mini-icon-btn" data-cat="itinerary">🔴<span class="mini-tooltip">環線行程</span></button>
       </div>
 
-      <!-- Filter bar with count badges (#2) -->
       <nav id="filter-bar" role="navigation" aria-label="景點分類篩選">
         <button class="filter-btn active" data-cat="all"        aria-pressed="true" >🗺️ 全部</button>
         <button class="filter-btn"        data-cat="attraction" aria-pressed="false">🏜️ 風景</button>
@@ -791,14 +709,12 @@
         <button class="filter-btn filter-itinerary" data-cat="itinerary" aria-pressed="false">🔴 環線行程</button>
       </nav>
 
-      <!-- List -->
       <ul id="location-list" role="list" aria-live="polite" aria-label="篩選後的景點"></ul>
     </aside>
 
     <section id="map-wrap" aria-label="互動地圖">
-      <div id="map" role="application" aria-label="亞利桑那州旅遊地圖"></div>
+      <div id="map" role="application" aria-label="旅遊地圖"></div>
 
-      <!-- #11 — Map Legend -->
       <div id="map-legend" aria-label="地圖圖例">
         <button id="legend-toggle" aria-expanded="false">
           <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
@@ -810,9 +726,7 @@
     </section>
   </main>
 
-  <!-- Leaflet + MarkerCluster JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
   <script>
@@ -822,295 +736,150 @@
     const LOCATIONS = [
       // Accommodation
       { id:'peoria', name:'Peoria（您的住宿基地）', category:'hotel',
-        lat:33.5806, lng:-112.2374, timeFromBase:'起點', icon:'fa-house', isBase:true,
-        desc:'這次旅程的溫馨基地，位於鳳凰城北側，前往北部峽谷、Sedona 及市區看球都非常便利。' },
+        lat:33.5806, lng:-112.2374, timeFromBase:'起點 / 終點', icon:'fa-house', isBase:true,
+        desc:'這次旅程的溫馨基地，前往北部峽谷與環線的起點與終點。' },
       { id:'courtyard-page', name:'Courtyard by Marriott Page at Lake Powell', category:'hotel',
         lat:36.9255, lng:-111.4725, timeFromBase:'車程約 4 小時（Page 市）', icon:'fa-bed',
         itineraryDay: 1,
-        desc:'前往羚羊峽谷與馬蹄灣的最佳連鎖飯店。設施完善、有戶外泳池，可累積 Bonvoy 積分。Night 1 住宿。' },
+        desc:'前往羚羊峽谷與馬蹄灣的最佳連鎖飯店。可累積 Bonvoy 積分。Night 1 住宿。' },
       { id:'view-hotel', name:'The View Hotel（紀念碑谷）', category:'hotel',
         lat:36.9947, lng:-110.1012, timeFromBase:'位於紀念碑谷公園內', icon:'fa-bed',
         itineraryDay: 2,
-        desc:'紀念碑谷唯一公園內飯店，每間客房均有私人陽台直面岩柱群，可在床上欣賞日出。Night 2 住宿。⚠️ 建議提前致電訂房：855-684-3407' },
-      { id:'fairfield-vegas', name:'Fairfield Inn Las Vegas Convention Center', category:'hotel',
-        lat:36.1302, lng:-115.1499, timeFromBase:'車程約 4 小時 40 分（Las Vegas）', icon:'fa-bed',
+        desc:'紀念碑谷唯一公園內飯店，每間客房均有私人陽台直面岩柱群。Night 2 住宿。' },
+      { id:'springhill-zion', name:'SpringHill Suites Springdale Zion National Park', category:'hotel',
+        lat:37.1844, lng:-113.0007, timeFromBase:'距 Zion 南門 1 英里', icon:'fa-bed',
         itineraryDay: 3,
-        desc:'Marriott Bonvoy 旗下實惠首選，含免費熱早餐。步行可達 Sphere（約 15 分鐘）與 Caesars Palace（David Byrne 演唱會場地）。Night 3 住宿。' },
-      { id:'westin-vegas', name:'The Westin Las Vegas Hotel & Spa', category:'hotel',
-        lat:36.1157, lng:-115.1690, timeFromBase:'車程約 4 小時 40 分（Las Vegas）', icon:'fa-hotel',
-        isMinor: true, isAltHotel: true,
-        desc:'備選・Westin 品牌，價位較高。無賭場、步行 8 分鐘到 Sphere，房間可欣賞 Sphere 光影秀。Bonvoy 高等級會員可享免費早餐。' },
+        desc:'Marriott 旗下，含早餐與 EV 充電。Zion 探索的完美落腳點。Night 3 住宿。' },
 
-      // Attractions
+      // Attractions: Main Loop
       { id:'antelope-canyon-x', name:'羚羊 X 峽谷（Antelope Canyon X）', category:'attraction',
         lat:36.8402, lng:-111.3713, timeFromBase:'車程約 4 小時（Page 市）', icon:'fa-camera', highlight:true,
         itineraryDay: 1,
-        desc:'⭐ 本次重要亮點：人潮較少的隱藏版狹縫型峽谷秘境，可悠閒拍照。⚠️ 必須提前線上預約導覽。' },
+        desc:'人潮較少的隱藏版狹縫型峽谷秘境，可悠閒拍照。⚠️ 必須提前線上預約導覽。' },
       { id:'horseshoe-bend', name:'馬蹄灣（Horseshoe Bend）', category:'attraction',
         lat:36.8791, lng:-111.5103, timeFromBase:'車程約 4 小時（Page 市）', icon:'fa-water',
         itineraryDay: 2,
-        desc:'距羚羊峽谷極近，科羅拉多河切割出 270° 壯麗懸崖大迴轉。建議 Day 2 清晨日出時前往。' },
+        desc:'科羅拉多河切割出 270° 壯麗懸崖大迴轉。建議 Day 2 清晨前往看日出。' },
       { id:'monument-valley', name:'紀念碑谷（Monument Valley）', category:'attraction',
         lat:36.9989, lng:-110.0984, timeFromBase:'從 Page 出發約 2 小時', icon:'fa-monument',
         itineraryDay: 2,
-        desc:'位於 AZ／UT 州界，壯觀的紅色孤峰群，美國西部牛仔電影與《阿甘正傳》的經典場景。' },
+        desc:'美國西部牛仔電影的經典場景，壯觀的紅色孤峰群。' },
+        
+      // Attractions: Zion Deep Dive (Day 4)
+      { id:'zion-np', name:'Zion NP: Angels Landing (若中籤)', category:'attraction',
+        lat:37.2693, lng:-112.9469, timeFromBase:'Zion 核心步道', icon:'fa-mountain', highlight:true,
+        itineraryDay: 4,
+        desc:'美國最著名的險峻步道之一。⚠️ 必須在 1 月中旬參與春季抽籤（Seasonal Lottery），無許可證強行攀登將面臨重罰。' },
+      { id:'zion-narrows', name:'Zion NP: The Narrows (溯溪)', category:'attraction',
+        lat:37.2843, lng:-112.9468, timeFromBase:'Zion 盡頭步道', icon:'fa-water', highlight:true,
+        itineraryDay: 4,
+        desc:'走入維琴河的史詩級峽谷溯溪路線。⚠️ 4 月融雪水溫極低且流速快，必須在 Springdale 鎮上租賃連身防寒衣與專用溯溪鞋。' },
+      { id:'canyon-overlook', name:'Zion NP: Canyon Overlook Trail', category:'attraction',
+        lat:37.2135, lng:-112.9405, timeFromBase:'Zion 東側步道', icon:'fa-binoculars',
+        itineraryDay: 4,
+        desc:'相對輕鬆的 1 英里往返步道，擁有俯瞰整個 Zion 峽谷的無敵視野，不需抽籤，CP 值極高。' },
+
+      // Local Peoria & Sedona 
       { id:'sedona', name:'塞多納（Sedona）', category:'attraction',
         lat:34.8697, lng:-111.7610, timeFromBase:'車程約 1 小時 45 分', icon:'fa-mountain-sun',
-        desc:'世界級紅岩景觀與靈性能量聖地。推薦 Bell Rock 或 Cathedral Rock 健行步道。' },
+        desc:'世界級紅岩景觀與靈性能量聖地。' },
       { id:'jerome', name:'傑羅姆（Jerome）', category:'attraction',
         lat:34.7489, lng:-112.1137, timeFromBase:'車程約 1 小時 30 分', icon:'fa-road',
-        desc:'89A 公路沿線的懸崖藝術小鎮，擁有絕佳視野，隨意漫步皆是風景。' },
+        desc:'89A 公路沿線的懸崖藝術小鎮，擁有絕佳視野。' },
       { id:'lake-pleasant', name:'歡樂湖區域公園（Lake Pleasant）', category:'attraction',
         lat:33.8447, lng:-112.2742, timeFromBase:'車程約 30 分鐘（備選）', icon:'fa-water',
-        desc:'Peoria 在地秘境，被高聳仙人掌環繞的沙漠湖泊，適合半日遊。' },
-      { id:'cave-creek', name:'穴溪（Cave Creek）', category:'attraction',
-        lat:33.8334, lng:-111.9507, timeFromBase:'車程約 35 分鐘（備選）', icon:'fa-hat-cowboy',
-        desc:'充滿西部牛仔風情的小鎮，感受原汁原味的亞利桑那沙漠地貌。' },
-      { id:'superstition-mountains', name:'迷信山脈與 Goldfield 鬼鎮', category:'attraction',
-        lat:33.4542, lng:-111.4795, timeFromBase:'車程約 1 小時（備選）', icon:'fa-ghost',
-        desc:'絕美鋸齒狀沙漠群山，搭配真實西部淘金小鎮，氣氛神秘有趣。' },
-      { id:'hoover-dam', name:'胡佛水壩（Hoover Dam）', category:'attraction',
-        lat:36.0160, lng:-114.7377, timeFromBase:'往拉斯維加斯中途點', icon:'fa-bridge-water',
-        itineraryDay: 3,
-        desc:'橫跨亞利桑那與內華達州界的宏偉工程奇蹟，往 Vegas 途中的必訪景點。' },
-      { id:'kingman', name:'金曼（Kingman）', category:'attraction',
-        lat:35.1894, lng:-114.0530, timeFromBase:'往拉斯維加斯中途點', icon:'fa-route',
-        itineraryDay: 3,
-        desc:'歷史性的 66 號公路重要據點，感受昔日公路旅行的浪漫氛圍。' },
-
-      // Peoria local attractions (new)
+        desc:'Peoria 在地秘境，被高聳仙人掌環繞的沙漠湖泊。' },
       { id:'old-town-peoria', name:'Old Town Peoria 舊城區', category:'attraction',
         lat:33.5806, lng:-112.2374, timeFromBase:'步行可達（Peoria 舊城區）', icon:'fa-store',
-        desc:'1899 年建築群構成的歷史街區，磚瓦步道、藝廊、獨立小店與週末農夫市集，Driftwood Coffee 就在此區，是散步的好去處。' },
+        desc:'1899 年建築群構成的歷史街區，散步的好去處。' },
       { id:'west-wing-preserve', name:'West Wing Mountain Preserve', category:'attraction',
         lat:33.7100, lng:-112.2400, timeFromBase:'車程約 15 分鐘（Peoria 北部）', icon:'fa-person-hiking',
-        desc:'緩坡沙漠步道，沙瓜羅仙人掌環繞，景色開闊，適合清晨健行或傍晚看夕陽，難度適中不需特別裝備。' },
-      { id:'new-river-trail', name:'New River Trail 多功能步道', category:'attraction',
-        lat:33.6200, lng:-112.2320, timeFromBase:'車程約 8 分鐘（Peoria 在地）', icon:'fa-bicycle',
-        desc:'沿新河而建的多功能步道，可騎單車、慢跑、散步，是 Peoria 居民日常運動的最愛，清晨氣氛尤其清幽。' },
-      { id:'wildlife-world-zoo', name:'Wildlife World Zoo & Aquarium', category:'attraction',
-        lat:33.5027, lng:-112.3489, timeFromBase:'車程約 20 分鐘（Litchfield Park）', icon:'fa-paw',
-        desc:'亞利桑那最大私人動物園，600+ 物種，含水族館、長頸鹿餵食體驗、袋鼠步道，半日遊的完美選擇。' },
-      { id:'peoria-sports-complex', name:'Peoria Sports Complex', category:'attraction',
-        lat:33.6815, lng:-112.2338, timeFromBase:'車程約 10 分鐘（Peoria 在地）', icon:'fa-baseball',
-        desc:'教士隊 & 水手隊的 MLB 春訓主場（3–4 月），悠閒氣氛、親民票價，近距離接觸大聯盟球員的好機會。' },
-      { id:'arizona-broadway-theatre', name:'Arizona Broadway Theatre', category:'attraction',
-        lat:33.6648, lng:-112.2338, timeFromBase:'車程約 10 分鐘（Peoria 在地）', icon:'fa-masks-theater',
-        desc:'餐廳 + 百老匯音樂劇的複合體驗，邊享用晚餐邊欣賞精彩演出，適合特別夜晚或慶祝場合。' },
-      { id:'cerreta-candy', name:'Cerreta Candy Company', category:'attraction',
-        lat:33.5384, lng:-112.2153, timeFromBase:'車程約 15 分鐘（Glendale）', icon:'fa-candy-cane',
-        desc:'家族經營的手工巧克力工廠，提供免費工廠導覽，親眼看到巧克力從可可豆製成，堪稱現實版「巧克力工廠」。' },
+        desc:'緩坡沙漠步道，沙瓜羅仙人掌環繞，景色開闊。' },
 
-      // Minor waypoints
+      // Minor waypoints (including Kanab)
       { id:'montezuma-castle', name:'蒙特祖馬城堡', category:'attraction',
         lat:34.6116, lng:-111.8326, timeFromBase:'往 Page 途中（距 Peoria 1.5h）', icon:'fa-campground', isMinor:true, minorLabel:'休息點',
-        desc:'建在懸崖峭壁上的千年印地安古城遺跡。平緩易走，非常適合下車伸展的短暫休息點。' },
+        desc:'建在懸崖峭壁上的千年印地安古城遺跡。' },
       { id:'flagstaff-macys', name:"Macy's 咖啡 / 旗桿市", category:'coffee',
         lat:35.1983, lng:-111.6496, timeFromBase:'往 Page 途中（距 Peoria 2h）', icon:'fa-mug-hot', isMinor:true, minorLabel:'咖啡補給',
-        desc:"亞利桑那北部的高山松樹城鎮。推薦到舊城區的老字號 Macy's European Coffeehouse 喝杯咖啡提神。" },
+        desc:"亞利桑那北部的高山松樹城鎮。推薦到舊城區的老字號 Macy's 喝咖啡。" },
       { id:'cameron-trading-post', name:'卡梅倫交易站', category:'restaurant',
         lat:35.8761, lng:-111.4124, timeFromBase:'往 Page 途中（距 Page 1h）', icon:'fa-store', isMinor:true, minorLabel:'順路午餐',
-        desc:'百年歷史的西部驛站。強烈推薦在此享用道地的「納瓦霍炸玉米餅」並逛逛印地安工藝品。' },
-      { id:'navajo-national-monument', name:'納瓦霍國家紀念區', category:'attraction',
-        lat:36.6782, lng:-110.5398, timeFromBase:'往紀念碑谷途中', icon:'fa-mountain', isMinor:true, minorLabel:'值得一看',
-        desc:'遊客稀少的壯闊峽谷，走一小段步道即可從懸崖眺望巨大洞穴裡的古代懸崖村莊。' },
-      { id:'kayenta-bk', name:'卡恩塔 漢堡王 / Amigo Cafe', category:'restaurant',
+        desc:'百年歷史的西部驛站。強烈推薦「納瓦霍炸玉米餅」。' },
+      { id:'kayenta-bk', name:'卡恩塔 漢堡王', category:'restaurant',
         lat:36.7278, lng:-110.2546, timeFromBase:'進入紀念碑谷前 30 分鐘', icon:'fa-hamburger', isMinor:true, minorLabel:'最後補給',
-        desc:'進入荒野前的最後補給鎮。漢堡王內有免費的「納瓦霍密碼語者」二戰歷史展覽。' },
-      { id:'rock-springs-cafe', name:'Rock Springs Cafe（百年手工派）', category:'restaurant',
-        lat:34.0531, lng:-112.1466, timeFromBase:'往北途中（距 Peoria 40m）', icon:'fa-cookie-bite', isMinor:true, minorLabel:'必嚐甜點',
-        desc:'從 1918 年營業至今的傳奇公路休息站。以美味的手工蘋果派與波本碧根果派聞名全美。' },
-      { id:'arcosanti', name:'Arcosanti（沙漠科幻建築）', category:'art',
-        lat:34.3423, lng:-112.1008, timeFromBase:'往北途中（距 Peoria 1h）', icon:'fa-building', isMinor:true, minorLabel:'建築奇景',
-        desc:'1970年代建造的實驗性生態建築城，外觀宛如科幻電影裡的沙漠基地，適合拍照與短暫探索。' },
-      { id:'hadley-fruit', name:'哈德利果園（椰棗奶昔）', category:'coffee',
-        lat:33.9264, lng:-116.8155, timeFromBase:'往南加州途中（I-10 公路）', icon:'fa-ice-cream', isMinor:true, minorLabel:'沙漠甜點',
-        desc:'南加州公路旅行必停的傳奇休息站！在穿越炎熱沙漠後，來一杯招牌「椰棗奶昔」是人間美味。' },
-      { id:'tortilla-flat', name:'Tortilla Flat（仙人掌冰淇淋）', category:'restaurant',
-        lat:33.5264, lng:-111.3897, timeFromBase:'往迷信山脈途中', icon:'fa-ice-cream', isMinor:true, minorLabel:'奇特體驗',
-        desc:'常住人口僅 6 人的微型小鎮，擁有貼滿美鈔的西部酒吧與奇特的「粉紅色仙人掌冰淇淋」。' },
-      { id:'cabazon-dinosaurs', name:'卡巴松恐龍', category:'attraction',
-        lat:33.9204, lng:-116.7727, timeFromBase:'往南加州途中（距哈德利果園極近）', icon:'fa-camera-retro', isMinor:true, minorLabel:'公路奇景',
-        desc:'沙漠中赫然矗立的巨大恐龍雕像，無數電影取景地，美國極具代表性的「公路怪奇景點」。' },
-      { id:'ostrich-ranch', name:'鴕鳥農場', category:'attraction',
-        lat:32.5976, lng:-111.3250, timeFromBase:'往南 / 圖森方向途中', icon:'fa-paw', isMinor:true, minorLabel:'親子體驗',
-        desc:'超級好玩的荒漠農場！可親手餵食數百隻瘋狂的鴕鳥、迷你驢，甚至在沙漠中餵食魟魚。' },
-      { id:'hackberry', name:'駭莓雜貨店', category:'shopping',
-        lat:35.3752, lng:-113.7226, timeFromBase:'往拉斯維加斯 / 66號公路途中', icon:'fa-gas-pump', isMinor:true, minorLabel:'公路復古',
-        desc:'宛如時光凍結的 1950 年代雜貨店，店外停滿老爺車與舊式加油機，復古公路感滿分。' },
-      { id:'meteor-crater', name:'巴林隕石坑', category:'attraction',
-        lat:35.0278, lng:-111.0222, timeFromBase:'往東 / I-40 公路途中', icon:'fa-meteor', isMinor:true, minorLabel:'地球奇觀',
-        desc:'地球上保存最完好的巨大隕石撞擊坑，直徑達 1.2 公里、深達 170 公尺，視覺震撼力極強。' },
+        desc:'進入荒野前的最後補給鎮。漢堡王內有免費的「納瓦霍密碼語者」展覽。' },
+      { id:'kanab-town', name:'卡納布（Kanab）', category:'restaurant',
+        lat:37.0475, lng:-112.5263, timeFromBase:'Monument Valley → Zion 中途', icon:'fa-utensils', isMinor:true, minorLabel:'中途休息',
+        desc:'俗稱「猶他州的小好萊塢」，Day 3 長途駕駛（約 5 小時）最佳的午餐與休息點。' },
+      { id:'best-friends-sanctuary', name:'Best Friends 動物庇護所', category:'attraction',
+        lat:37.1147, lng:-112.5459, timeFromBase:'Kanab 往北 10 分鐘', icon:'fa-paw', isMinor:true, minorLabel:'順路參觀',
+        desc:'世界最大的無殺生動物庇護所，可免費參觀，喜歡動物者值得順路停。' },
+      { id:'rock-springs-cafe', name:'Rock Springs Cafe', category:'restaurant',
+        lat:34.0531, lng:-112.1466, timeFromBase:'往北途中 / 回程（距 Peoria 40m）', icon:'fa-cookie-bite', isMinor:true, minorLabel:'必嚐甜點',
+        desc:'1918 年營業至今的傳奇公路休息站。手工蘋果派聞名全美。' },
 
       // Art & Museums
       { id:'heard-museum', name:'赫德博物館（Heard Museum）', category:'art',
         lat:33.4729, lng:-112.0735, timeFromBase:'車程約 35 分鐘（市區）', icon:'fa-masks-theater',
-        desc:'全美頂尖的美洲原住民藝術與文化殿堂，典藏品精彩豐富。' },
+        desc:'全美頂尖的美洲原住民藝術與文化殿堂。' },
       { id:'phx-art-museum', name:'鳳凰城美術館（Phoenix Art Museum）', category:'art',
         lat:33.4673, lng:-112.0730, timeFromBase:'車程約 35 分鐘（市區）', icon:'fa-palette',
-        desc:'60 週年時尚典藏雙特展《Colorwear》現正展出中，強力推薦。' },
-      { id:'taliesin-west', name:'西塔里耶森（Taliesin West）', category:'art',
-        lat:33.6063, lng:-111.8453, timeFromBase:'車程約 35 分鐘（Scottsdale）', icon:'fa-building',
-        desc:'建築大師法蘭克·洛伊·萊特的沙漠有機建築，UNESCO 世界文化遺產。' },
+        desc:'60 週年時尚典藏雙特展《Colorwear》現正展出中。' },
 
-      // Restaurants
+      // Restaurants & Coffee (Including Zion Area)
       { id:'el-tapatio', name:'El Tapatio', category:'restaurant',
         lat:36.9172, lng:-111.4583, timeFromBase:'位於 Page 市', icon:'fa-pepper-hot',
-        desc:'超人氣墨西哥餐廳，氣氛熱鬧。法西塔（Fajitas）與超大杯瑪格麗特是必點招牌。' },
-      { id:'fiesta-mexicana', name:'Fiesta Mexicana Restaurant', category:'restaurant',
-        lat:36.9142, lng:-111.4646, timeFromBase:'位於 Page 市', icon:'fa-utensils',
-        desc:'道地且份量飽足的墨西哥料理，抵達 Page 的第一餐首選。' },
-      { id:'arrowhead-grill', name:'Arrowhead Grill', category:'restaurant',
-        lat:33.6740, lng:-112.2223, timeFromBase:'車程約 12 分鐘（Glendale）', icon:'fa-utensils',
-        desc:'Peoria 周邊極力推薦的高級熟成牛排館，商務晚宴或慶祝餐首選。' },
-      { id:'fabio-on-fire', name:'Fabio on Fire', category:'restaurant',
-        lat:33.6802, lng:-112.2750, timeFromBase:'車程約 15 分鐘（Peoria 在地）', icon:'fa-pizza-slice',
-        desc:'頂級義大利柴窯披薩，在地人的口袋名單。' },
-      { id:'pizzeria-bianco', name:'Pizzeria Bianco', category:'restaurant',
-        lat:33.4500, lng:-112.0658, timeFromBase:'車程約 35 分鐘（鳳凰城市區）', icon:'fa-pizza-slice',
-        desc:'全美最知名披薩名店之一，緊鄰 MLB 球場，強烈建議提前訂位。' },
-      { id:'elote-cafe', name:'Elote Cafe／Mariposa', category:'restaurant',
+        desc:'超人氣墨西哥餐廳，法西塔與瑪格麗特是必點招牌。' },
+      { id:'elote-cafe', name:'Elote Cafe', category:'restaurant',
         lat:34.8631, lng:-111.7629, timeFromBase:'位於塞多納（Sedona）', icon:'fa-wine-glass',
-        desc:'現代墨西哥料理搭配無敵紅岩景觀，旅途中最美的一餐（務必提前訂位）。' },
-
-      // Coffee
+        desc:'現代墨西哥料理搭配無敵紅岩景觀（務必提前訂位）。' },
+      { id:'oscars-cafe', name:"Oscar's Cafe", category:'restaurant',
+        lat:37.1901, lng:-112.9980, timeFromBase:'Springdale 鎮上', icon:'fa-utensils',
+        desc:'西南墨西哥風味，Springdale 經典在地餐廳，蝦塔可評價極高。' },
+      { id:'deep-creek-coffee', name:'Deep Creek Coffee', category:'coffee',
+        lat:37.1895, lng:-112.9984, timeFromBase:'Springdale 鎮上', icon:'fa-mug-hot',
+        itineraryDay: 4,
+        desc:'Zion 當地最佳精品咖啡，招牌 Bro-rito 早餐捲餅極受歡迎。' },
+      { id:'canyon-coffee', name:'Canyon Coffee', category:'coffee',
+        lat:37.1950, lng:-112.9900, timeFromBase:'距 Zion 入口半英里', icon:'fa-mug-hot',
+        itineraryDay: 4,
+        desc:'戶外座位直對峽谷紅岩，視覺享受無與倫比，適合健行前後補給。' },
       { id:'driftwood', name:'Driftwood Coffee Co.', category:'coffee',
         lat:33.5815, lng:-112.2405, timeFromBase:'車程約 5 分鐘（Peoria 舊城區）', icon:'fa-mug-hot',
-        desc:'舊城區精品咖啡館，提供多家烘焙商手沖選項，旅途出發前的元氣補給站。' },
+        desc:'舊城區精品咖啡館，旅途出發前的元氣補給站。' },
       { id:'well-coffee', name:'Well Coffee Co.', category:'coffee',
         lat:33.6050, lng:-112.2480, timeFromBase:'車程約 10 分鐘（Peoria 在地）', icon:'fa-mug-hot',
-        desc:'氣氛溫馨明亮，使用知名 Peixoto 莊園級咖啡豆，就近享受好咖啡的絕佳選擇。' },
-      { id:'union-coffee', name:'Union Coffee Co.', category:'coffee',
-        lat:33.6138, lng:-112.2338, timeFromBase:'車程約 8 分鐘（Peoria 在地）', icon:'fa-mug-hot',
-        desc:'自家烘焙精品咖啡，以冷萃與白摩卡拿鐵著稱，極簡白色空間氣氛絕佳。' },
-      { id:'wild-pine', name:'Wild Pine Coffee Co.', category:'coffee',
-        lat:33.7163, lng:-112.2916, timeFromBase:'車程約 15 分鐘（Peoria 北部）', icon:'fa-leaf',
-        desc:'招牌芋頭拿鐵（Ube Latte）與特調飲品極具創意，同時供應早午餐菜單，網美打卡熱點。' },
-      { id:'house-of-honey', name:'House of Honey', category:'coffee',
-        lat:33.6575, lng:-112.2494, timeFromBase:'車程約 12 分鐘（Peoria 在地）', icon:'fa-jar',
-        desc:'老闆自養蜂巢、自產蜂蜜，招牌肉桂蜂蜜拿鐵獨一無二，同時供應蜂蜜鬆餅早午餐。' },
-      { id:'peixoto', name:'Peixoto Coffee Roasters', category:'coffee',
-        lat:33.3032, lng:-111.8415, timeFromBase:'車程約 50 分鐘（Chandler）', icon:'fa-seedling',
-        desc:'老闆家族在巴西自有莊園，真正的「從產地到杯子」精品咖啡體驗。' },
-      { id:'dark-hall', name:'Dark Hall Coffee', category:'coffee',
-        lat:33.4754, lng:-112.0645, timeFromBase:'車程約 35 分鐘（市區）', icon:'fa-moon',
-        desc:'全植物性糕點與獨特的「哥德式暗黑花卉」風格，視覺與味覺都極具張力的特色店。' },
-      { id:'lux-central', name:'Lux Central', category:'coffee',
-        lat:33.5049, lng:-112.0743, timeFromBase:'車程約 30 分鐘（市區）', icon:'fa-couch',
-        desc:'鳳凰城最傳奇的文青集散地！結合復古客廳風與深夜酒吧氛圍，甜點和手沖都極具水準。' },
-      { id:'copper-star', name:'Copper Star Coffee', category:'coffee',
-        lat:33.4996, lng:-112.0469, timeFromBase:'車程約 35 分鐘（市區）', icon:'fa-gas-pump',
-        desc:'由 1950 年代復古加油站改建而成，充滿濃濃的老派美式公路風情與超人氣貝果。' },
-      { id:'mythical-coffee', name:'Mythical Coffee', category:'coffee',
-        lat:33.3056, lng:-111.7511, timeFromBase:'車程約 45 分鐘（Gilbert）', icon:'fa-wand-magic-sparkles',
-        desc:'以「奇幻神話」為主題的精品咖啡，特調飲品充滿魔法般的創意，裝潢明亮且具設計感。' },
-
-      // Brunch — Peoria area (new)
+        desc:'氣氛溫馨明亮，使用知名 Peixoto 莊園級咖啡豆。' },
       { id:'haymaker-thunderbird', name:'Haymaker Thunderbird', category:'restaurant',
         lat:33.6138, lng:-112.2507, timeFromBase:'車程約 8 分鐘（Peoria 在地）', icon:'fa-egg',
-        desc:'Peoria 在地人評分最高的早午餐首選！大份量美式早餐、活潑熱鬧氣氛，週末務必提早到。' },
-      { id:'haymaker-north', name:'Haymaker North Peoria', category:'restaurant',
-        lat:33.7381, lng:-112.2747, timeFromBase:'車程約 18 分鐘（Peoria 北部）', icon:'fa-egg',
-        desc:'Haymaker 較新的北部分店，空間更寬敞，同樣超人氣的美式早午餐，候位時間通常較短。' },
+        desc:'Peoria 在地人評分最高的早午餐首選！' },
       { id:'hash-kitchen-p83', name:'Hash Kitchen P83', category:'restaurant',
         lat:33.5953, lng:-112.2331, timeFromBase:'車程約 5 分鐘（P83 娛樂區）', icon:'fa-utensils',
-        desc:'以「自助 Bloody Mary Bar」聞名全美的創意早午餐！各式雞蛋料理、Hash 鐵板料理，視覺與味覺雙重享受。' },
-      { id:'hash-kitchen-arrowhead', name:'Hash Kitchen Arrowhead', category:'restaurant',
-        lat:33.6820, lng:-112.2341, timeFromBase:'車程約 10 分鐘（Arrowhead 購物中心旁）', icon:'fa-utensils',
-        desc:'Arrowhead 購物中心旁的 Hash Kitchen 分店，逛街前後用餐的好選擇，同樣供應招牌 Bloody Mary Bar。' },
-      { id:'kiss-the-cook', name:'Kiss the Cook', category:'restaurant',
-        lat:33.5384, lng:-112.2005, timeFromBase:'車程約 15 分鐘（Glendale）', icon:'fa-heart',
-        desc:'1982 年開業的老字號南方風味早餐館，Eggs Benedict 備受好評，寵物友善露台，充滿老鳳凰城的溫暖人情味。' },
+        desc:'以「自助 Bloody Mary Bar」聞名全美的創意早午餐。' },
 
       // Shopping
       { id:'outlets-anthem', name:'Outlets at Anthem', category:'shopping',
-        lat:33.8821, lng:-112.1328, timeFromBase:'車程約 30 分鐘（往北）', icon:'fa-bag-shopping',
-        desc:'前往塞多納或峽谷的順路必經，適合短暫停留掃貨。（注意：亞利桑那州無免稅）' },
-      { id:'premium-outlets', name:'Phoenix Premium Outlets', category:'shopping',
-        lat:33.2829, lng:-111.9739, timeFromBase:'車程約 45 分鐘（往南 Chandler）', icon:'fa-tags',
-        desc:'品牌齊全豐富的大型暢貨中心，喜愛購物者不容錯過。' },
-
-      // Events — with eventDate field (#8)
-      { id:'chase-field', name:'大通體育場（Chase Field）— MLB', category:'events',
-        lat:33.4453, lng:-112.0667, timeFromBase:'車程約 35 分鐘（市區）', icon:'fa-baseball',
-        eventDate:'4/17–19 藍鳥・4/21–23 白襪',
-        desc:'響尾蛇隊主場，現場看球氣氛熱烈。' },
-      { id:'charlie-puth', name:'Charlie Puth 演唱會', category:'events',
-        lat:33.4497, lng:-112.0811, timeFromBase:'車程約 35 分鐘（市區）', icon:'fa-microphone',
-        eventDate:'4/24',
-        desc:'於 Arizona Financial Theatre 演出，流行樂迷必去。' },
-      { id:'james-taylor-la', name:'James Taylor 演唱會（南加州）', category:'events',
-        lat:34.1378, lng:-117.1856, timeFromBase:'跨州行程（加州）', icon:'fa-guitar',
-        eventDate:"4/26 或 4/28",
-        desc:"4/26（Yaamava' Theater）或 4/28（聖地牙哥 Rady Shell 海濱戶外劇場）。" },
-      { id:'sphere-vegas', name:'Sphere 巨型球體劇場（拉斯維加斯）', category:'events',
-        lat:36.1215, lng:-115.1615, timeFromBase:'車程約 4 小時 40 分（內華達州）', icon:'fa-globe',
-        eventDate:'4/18・4/23–25',
-        desc:'Phish 樂團演唱會或《綠野仙蹤》沉浸式電影體驗。' },
-      { id:'david-byrne', name:'David Byrne 演唱會', category:'events',
-        lat:36.1170, lng:-115.1760, timeFromBase:'跨州行程（拉斯維加斯）', icon:'fa-music',
-        eventDate:'4/20',
-        desc:'凱薩宮 Colosseum，前衛搖滾傳奇的一夜獨場，千萬不要錯過。' },
-
-      // Dodger Stadium — 大谷翔平（#3: 兩場次座標微錯開避免重疊）
-      { id:'dodger-stadium-cubs', name:'Dodger Stadium — 大谷翔平・vs 小熊', category:'events',
-        lat:34.0739, lng:-118.2400, timeFromBase:'從 Las Vegas 車程約 4 小時（跨州・加州）', icon:'fa-baseball',
-        eventDate:'4/24–26',
-        desc:'道奇主場對芝加哥小熊，3 場系列賽。⭐ 最推薦 4/26（週日）下午 4:10 場次，看完球當晚不影響 James Taylor 演唱會行程。大谷翔平打擊出賽率接近 100%，票價從 $136 起。' },
-      { id:'dodger-stadium-marlins', name:'Dodger Stadium — 大谷翔平・vs 馬林魚', category:'events',
-        lat:34.0750, lng:-118.2395, timeFromBase:'從 Las Vegas 車程約 4 小時（跨州・加州）', icon:'fa-baseball',
-        eventDate:'4/27–29',
-        desc:'道奇主場對邁阿密馬林魚，3 場系列賽。票價最親民，從 $96 起。4/28（週二）晚間場次可與聖地牙哥 James Taylor 演唱會前後搭配。' }
+        lat:33.8821, lng:-112.1328, timeFromBase:'往北 / 回程 順路', icon:'fa-bag-shopping',
+        desc:'位於 I-17 公路旁，適合短暫停留掃貨。' }
     ];
 
-    /* ── Category Config ─────────────────────────────── */
-    const CAT_COLOR = {
-      attraction: '#d95f02',
-      art:        '#1b7abf',
-      restaurant: '#e6a817',
-      coffee:     '#6b4c2a',
-      shopping:   '#c040a0',
-      events:     '#1d9960',
-      hotel:      '#3a5fa8'
-    };
-    const CAT_LABEL = {
-      attraction: '🏜️ 風景',  art: '🎨 藝文',
-      restaurant: '🍽️ 餐廳', coffee: '☕ 咖啡',
-      shopping:   '🛍️ 購物',  events: '🎟️ 賽事演出',
-      hotel:      '🏨 住宿'
-    };
-    const CAT_SHAPE = {
-      attraction: 'shape-drop',  art: 'shape-diamond',
-      restaurant: 'shape-square', coffee: 'shape-circle',
-      shopping:   'shape-tag',   events: 'shape-star',
-      hotel:      'shape-house'
-    };
+    const CAT_COLOR = { attraction: '#d95f02', art: '#1b7abf', restaurant: '#e6a817', coffee: '#6b4c2a', shopping: '#c040a0', events: '#1d9960', hotel: '#3a5fa8' };
+    const CAT_LABEL = { attraction: '🏜️ 風景', art: '🎨 藝文', restaurant: '🍽️ 餐廳', coffee: '☕ 咖啡', shopping: '🛍️ 購物', events: '🎟️ 賽事演出', hotel: '🏨 住宿' };
+    const CAT_SHAPE = { attraction: 'shape-drop', art: 'shape-diamond', restaurant: 'shape-square', coffee: 'shape-circle', shopping: 'shape-tag', events: 'shape-star', hotel: 'shape-house' };
 
-    /* ── State ───────────────────────────────────────── */
     let currentCat  = 'all';
     let leafletMap  = null;
     let clusterGroup = null;
     const markersMap = {};
 
-    /* ── Rating Config ───────────────────────────────── */
-    // ⚠️ #1 — 部署前請在 GitHub repo → Issues → Labels 建立一個名為 "rating" 的 label
-    //         否則 Actions workflow 的 labels:['rating'] 步驟會失敗
-    const GH_OWNER  = 'jerome57';
-    const GH_REPO   = 'az';
-    const _a = 'github_pat_11ABGUCTQ0wp86ynlrMQbs_';
-    const _b = 'R6wZvyWdWdl70XOF1lpeVAFLCJBvYBdNPCN12n3oE7AH7A7GZP6ySsnrzcA';
-    const GH_TOKEN  = _a + _b;
-    let ratingsData = {};   // { locId: [scores…] }
-
-    /* ── Map ─────────────────────────────────────────── */
     function initMap() {
-      leafletMap = L.map('map', { zoomControl: true }).setView([34.5, -111.5], 7);
+      leafletMap = L.map('map', { zoomControl: true }).setView([35.5, -112.5], 6);
       L.tileLayer('https://mt1.google.com/vt/lyrs=m&hl=zh-TW&x={x}&y={y}&z={z}', {
         attribution: '&copy; <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a>',
         maxZoom: 20
       }).addTo(leafletMap);
 
-      // #1 — MarkerCluster group
       clusterGroup = L.markerClusterGroup({
         disableClusteringAtZoom: 10,
         maxClusterRadius: 50,
@@ -1122,8 +891,8 @@
 
       LOCATIONS.forEach(addMarker);
       fitAllVisible();
-      buildLegend();        // #11
-      updateFilterBadges(); // #2
+      buildLegend();
+      updateFilterBadges();
     }
 
     function makeIcon(loc) {
@@ -1131,8 +900,7 @@
         const color = CAT_COLOR[loc.category] || '#888';
         return L.divIcon({
           className: '',
-          html: `<div class="map-pin is-minor" style="background:${color}" aria-hidden="true">
-                   <i class="fa-solid ${loc.icon}"></i></div>`,
+          html: `<div class="map-pin is-minor" style="background:${color}" aria-hidden="true"><i class="fa-solid ${loc.icon}"></i></div>`,
           iconSize: [22,22], iconAnchor: [11,11], popupAnchor: [0,-13]
         });
       }
@@ -1144,79 +912,19 @@
       const popY = shape === 'shape-drop' ? -22 : -20;
       return L.divIcon({
         className: '',
-        html: `<div class="map-pin ${shape}" style="background:${color};color:${color}" aria-hidden="true">
-                 <i class="fa-solid ${loc.icon}" style="color:#fff"></i></div>`,
+        html: `<div class="map-pin ${shape}" style="background:${color};color:${color}" aria-hidden="true"><i class="fa-solid ${loc.icon}" style="color:#fff"></i></div>`,
         iconSize: [size,size], iconAnchor: [anc,anc], popupAnchor: [0,popY]
       });
-    }
-
-    /* ── Rating Helpers (宣告在 addMarker 之前) ─────── */
-    function renderRatingSummary(id) {
-      const scores = ratingsData[id];
-      if (!scores || !scores.length) return '尚無評分';
-      const avg  = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
-      const full = Math.round(+avg);
-      return '★'.repeat(full) + '☆'.repeat(5 - full) + ` ${avg}（${scores.length} 人）`;
-    }
-
-    async function submitRating(locId, score, starEls) {
-      const statusEl = document.getElementById(`rating-status-${locId}`);
-      const sumEl    = document.getElementById(`rating-summary-${locId}`);
-      const wrap     = document.getElementById(`stars-${locId}`);
-
-      starEls.forEach((s, i) => { s.classList.toggle('selected', i < score); s.disabled = true; });
-      if (statusEl) { statusEl.textContent = '傳送中…'; statusEl.className = 'popup-rating-status sending'; }
-      try {
-        const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/issues`, {
-          method: 'POST',
-          headers: {
-            'Authorization':        `Bearer ${GH_TOKEN}`,
-            'Content-Type':         'application/json',
-            'Accept':               'application/vnd.github+json',
-            'X-GitHub-Api-Version': '2022-11-28'
-          },
-          body: JSON.stringify({
-            title: `rating:${locId}:${score}`,
-            body:  `{"id":"${locId}","score":${score}}`,
-            labels: ['rating']
-          })
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        if (!ratingsData[locId]) ratingsData[locId] = [];
-        ratingsData[locId].push(score);
-        if (sumEl) sumEl.textContent = renderRatingSummary(locId);
-        if (statusEl) {
-          // #2 — add re-rate link after success
-          statusEl.innerHTML = '✓ 已送出！ <a href="#" style="color:var(--dust);text-decoration:underline;font-weight:400;">重新評分</a>';
-          statusEl.className = 'popup-rating-status success';
-          statusEl.querySelector('a')?.addEventListener('click', e => {
-            e.preventDefault();
-            starEls.forEach(s => { s.disabled = false; s.classList.remove('selected'); });
-            statusEl.textContent = '';
-            statusEl.className = 'popup-rating-status';
-            if (wrap) delete wrap.dataset.bound;  // allow re-binding
-          });
-        }
-      } catch {
-        if (statusEl) { statusEl.textContent = '傳送失敗，請稍後再試。'; statusEl.className = 'popup-rating-status error'; }
-        starEls.forEach(s => { s.disabled = false; s.classList.remove('selected'); });
-      }
     }
 
     function addMarker(loc) {
       const color     = CAT_COLOR[loc.category] || '#666';
       const gmapUrl   = `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}&travelmode=driving`;
       const teslaUrl  = `https://nav.tesla.com/tesla/ownership/navigation?lat=${loc.lat}&lon=${loc.lng}&name=${encodeURIComponent(loc.name)}`;
-      const dateBadge = loc.eventDate
-        ? `<div class="popup-date"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i>${escHtml(loc.eventDate)}</div>`
-        : '';
-      const dayBadge = loc.itineraryDay
-        ? `<div class="popup-day day-${loc.itineraryDay}"><i class="fa-solid fa-route" aria-hidden="true"></i> Day ${loc.itineraryDay}</div>`
-        : '';
+      const dateBadge = loc.eventDate ? `<div class="popup-date"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i>${escHtml(loc.eventDate)}</div>` : '';
+      const dayBadge  = loc.itineraryDay ? `<div class="popup-day day-${loc.itineraryDay}"><i class="fa-solid fa-route" aria-hidden="true"></i> Day ${loc.itineraryDay}</div>` : '';
 
-      const marker = L.marker([loc.lat, loc.lng], {
-        icon: makeIcon(loc), title: loc.name, alt: loc.name
-      });
+      const marker = L.marker([loc.lat, loc.lng], { icon: makeIcon(loc), title: loc.name, alt: loc.name });
 
       marker.bindPopup(`
         <div class="popup-title" style="color:${color}">${escHtml(loc.name)}</div>
@@ -1224,62 +932,22 @@
         ${dayBadge}${dateBadge}
         <div class="popup-desc">${escHtml(loc.desc)}</div>
         <div class="popup-nav-row">
-          <a class="popup-nav-btn btn-gmap" href="${gmapUrl}" target="_blank" rel="noopener noreferrer"
-             style="color:#fff!important"
-             aria-label="在 Google Maps 導航至 ${escHtml(loc.name)}">
+          <a class="popup-nav-btn btn-gmap" href="${gmapUrl}" target="_blank" rel="noopener noreferrer" style="color:#fff!important">
             <i class="fa-solid fa-diamond-turn-right" style="color:#fff!important" aria-hidden="true"></i> Google Maps
           </a>
-          <a class="popup-nav-btn btn-tesla" href="${teslaUrl}" target="_blank" rel="noopener noreferrer"
-             style="color:#fff!important"
-             aria-label="傳送至 Tesla 導航">
+          <a class="popup-nav-btn btn-tesla" href="${teslaUrl}" target="_blank" rel="noopener noreferrer" style="color:#fff!important">
             <i class="fa-solid fa-car-side" style="color:#fff!important" aria-hidden="true"></i> Tesla
           </a>
         </div>
-        <div class="popup-rating-wrap" id="rating-wrap-${loc.id}">
-          <div class="popup-rating-label">
-            <span>你的推薦指數</span>
-            <span class="popup-rating-summary" id="rating-summary-${loc.id}">${renderRatingSummary(loc.id)}</span>
-          </div>
-          <div class="popup-stars" id="stars-${loc.id}" role="group" aria-label="評分 1 到 5 星">
-            ${[1,2,3,4,5].map(n => `<button class="popup-star" data-loc="${loc.id}" data-score="${n}" aria-label="${n} 星" title="${n} 星">★</button>`).join('')}
-          </div>
-          <div class="popup-rating-status" id="rating-status-${loc.id}"></div>
-        </div>
       `, { maxWidth: 300, minWidth: 260 });
-
-      // Wire up star interactions — use { once: false } but track bound state to prevent accumulation
-      marker.on('popupopen', () => {
-        const wrap = document.getElementById(`stars-${loc.id}`);
-        if (!wrap || wrap.dataset.bound) return;
-        wrap.dataset.bound = '1';   // mark as bound — prevents re-binding on subsequent opens
-        const stars = wrap.querySelectorAll('.popup-star');
-
-        stars.forEach(btn => {
-          btn.addEventListener('mouseenter', () => {
-            const n = +btn.dataset.score;
-            stars.forEach((s, i) => s.classList.toggle('hovered', i < n));
-          });
-          btn.addEventListener('mouseleave', () => {
-            stars.forEach(s => s.classList.remove('hovered'));
-          });
-          btn.addEventListener('click', () => submitRating(loc.id, +btn.dataset.score, stars));
-        });
-
-        // Refresh summary with latest ratingsData
-        const sumEl = document.getElementById(`rating-summary-${loc.id}`);
-        if (sumEl) sumEl.textContent = renderRatingSummary(loc.id);
-      });
 
       marker.on('click', () => scrollCardIntoView(loc.id));
       markersMap[loc.id] = marker;
       clusterGroup.addLayer(marker);
     }
 
-    /* ── #11 Legend ──────────────────────────────────── */
     function buildLegend() {
       const body = document.getElementById('legend-body');
-
-      // Category pins
       Object.entries(CAT_COLOR).forEach(([cat, color]) => {
         const row = document.createElement('div');
         row.className = 'legend-row'; row.setAttribute('role','listitem');
@@ -1287,19 +955,18 @@
         body.appendChild(row);
       });
 
-      // Itinerary day lines separator
       const sep = document.createElement('div');
       sep.style.cssText = 'border-top:1px solid var(--sand-dark);margin:5px 0 3px;';
       body.appendChild(sep);
 
       const itinLabel = document.createElement('div');
       itinLabel.style.cssText = 'font-size:.65rem;font-weight:600;color:var(--dust);letter-spacing:.04em;text-transform:uppercase;padding:2px 0 4px;';
-      itinLabel.textContent = '環線行程';
+      itinLabel.textContent = '環線行程（5 天）';
       body.appendChild(itinLabel);
 
-      const DAY_NAMES = { 1:'Day 1・Peoria → Page', 2:'Day 2・Page → 紀念碑谷', 3:'Day 3・紀念碑谷 → Vegas', 4:'Day 4・Vegas → Peoria' };
-      const DAY_COLORS = { 1:'#e07020', 2:'#b83030', 3:'#7040b0', 4:'#2060a0' };
-      [1,2,3,4].forEach(d => {
+      const DAY_NAMES = { 1:'Day 1・Peoria → Page', 2:'Day 2・Page → 紀念碑谷', 3:'Day 3・紀念碑谷 → Zion', 4:'Day 4・Zion 深度探索', 5:'Day 5・Zion → Peoria' };
+      const DAY_COLORS = { 1:'#e07020', 2:'#b83030', 3:'#8b5a2b', 4:'#3a7a5a', 5:'#2060a0' };
+      [1,2,3,4,5].forEach(d => {
         const row = document.createElement('div');
         row.className = 'legend-row'; row.setAttribute('role','listitem');
         row.innerHTML = `<span style="display:inline-block;width:22px;height:4px;border-radius:2px;background:${DAY_COLORS[d]};border-bottom:2px dashed rgba(255,255,255,.5);flex-shrink:0;"></span>${DAY_NAMES[d]}`;
@@ -1314,13 +981,10 @@
       });
     }
 
-    /* ── #2 Filter Badges ────────────────────────────── */
     function updateFilterBadges() {
       document.querySelectorAll('.filter-btn[data-cat]').forEach(btn => {
         const cat = btn.dataset.cat;
-        // Skip itinerary — it's not a category, no meaningful count
         if (cat === 'itinerary') return;
-
         let existing = btn.querySelector('.filter-badge');
         const count = cat === 'all'
           ? LOCATIONS.filter(l => !l.isMinor && !l.isAltHotel).length
@@ -1335,20 +999,18 @@
       });
     }
 
-    /* ── List ────────────────────────────────────────── */
     function renderList() {
       const list = document.getElementById('location-list');
       list.innerHTML = '';
-
       const isItinerary = currentCat === 'itinerary';
 
-      // ── Itinerary mode: group by day ─────────────────
       if (isItinerary) {
-        const dayColors = { 1:'var(--day1)', 2:'var(--day2)', 3:'var(--day3)', 4:'var(--day4)' };
-        const dayNames  = { 1:'Day 1・Peoria → Page', 2:'Day 2・Page → 紀念碑谷', 3:'Day 3・紀念碑谷 → Vegas', 4:'Day 4・回程 Vegas → Peoria' };
-        [1,2,3,4].forEach(day => {
+        const dayColors = { 1:'var(--day1)', 2:'var(--day2)', 3:'var(--day3)', 4:'var(--day4)', 5:'var(--day5)' };
+        const dayNames  = { 1:'Day 1・Peoria → Page', 2:'Day 2・Page → 紀念碑谷', 3:'Day 3・紀念碑谷 → Zion', 4:'Day 4・Zion 深度探索', 5:'Day 5・回程 Zion → Peoria' };
+        
+        [1,2,3,4,5].forEach(day => {
           const locs = LOCATIONS.filter(l => l.itineraryDay === day);
-          if (!locs.length && day !== 4) return;
+          if (!locs.length && day !== 5) return;
 
           const lbl = document.createElement('li');
           lbl.className = 'list-section-label';
@@ -1356,17 +1018,9 @@
           lbl.innerHTML = `<i class="fa-solid fa-route"></i> ${dayNames[day]}`;
           list.appendChild(lbl);
 
-          if (day === 4) {
-            const note = document.createElement('li');
-            note.style.cssText = 'font-size:.72rem;color:var(--dust);padding:6px 10px;';
-            note.textContent = '沿 US-93 → I-40 → I-17 直接回 Peoria，車程約 4 小時。';
-            list.appendChild(note);
-          } else {
-            locs.forEach(loc => appendCard(list, loc));
-          }
+          locs.forEach(loc => appendCard(list, loc));
         });
 
-        // Alt hotel section
         const alts = LOCATIONS.filter(l => l.isAltHotel);
         if (alts.length) {
           const lbl = document.createElement('li');
@@ -1378,16 +1032,12 @@
         return;
       }
 
-      // ── Normal mode ───────────────────────────────────
       const isFiltered = currentCat !== 'all';
-
       const primary = LOCATIONS.filter(loc =>
         !loc.isMinor && !loc.isAltHotel &&
         (currentCat === 'all' || loc.category === currentCat || loc.category === 'hotel')
       );
-      const minor = LOCATIONS.filter(loc =>
-        loc.isMinor && (currentCat === 'all' || loc.category === currentCat)
-      );
+      const minor = LOCATIONS.filter(loc => loc.isMinor && (currentCat === 'all' || loc.category === currentCat));
 
       if (isFiltered && currentCat !== 'hotel') {
         const lbl = document.createElement('li');
@@ -1414,9 +1064,7 @@
         const toggleLi = document.createElement('li');
         const toggleBtn = document.createElement('button');
         toggleBtn.className = 'minor-group-toggle';
-        toggleBtn.innerHTML = `<i class="fa-solid fa-circle-pause" aria-hidden="true"></i>
-          順路中繼點 · ${minor.length} 個
-          <i class="fa-solid fa-chevron-down toggle-arrow" aria-hidden="true"></i>`;
+        toggleBtn.innerHTML = `<i class="fa-solid fa-circle-pause" aria-hidden="true"></i> 順路中繼點 · ${minor.length} 個 <i class="fa-solid fa-chevron-down toggle-arrow" aria-hidden="true"></i>`;
         toggleBtn.setAttribute('aria-expanded', 'false');
         toggleLi.appendChild(toggleBtn);
         list.appendChild(toggleLi);
@@ -1451,46 +1099,22 @@
       li.setAttribute('role', 'listitem');
 
       const btn = document.createElement('button');
-      btn.className = ['loc-card',
-        loc.isBase      ? 'is-base'      : '',
-        loc.highlight   ? 'is-highlight' : '',
-        loc.isMinor     ? 'is-minor'     : '',
-        loc.isAltHotel  ? 'is-alt-hotel' : ''
-      ].filter(Boolean).join(' ');
+      btn.className = ['loc-card', loc.isBase ? 'is-base' : '', loc.highlight ? 'is-highlight' : '', loc.isMinor ? 'is-minor' : '', loc.isAltHotel ? 'is-alt-hotel' : ''].filter(Boolean).join(' ');
       btn.id = `card-${loc.id}`;
       btn.setAttribute('aria-label', `前往地圖查看：${loc.name}`);
-      // #11 — addEventListener for consistency
       btn.addEventListener('click', () => focusLocation(loc.id));
 
-      // #7 — use minorLabel if available for precise tag text
-      const tagHtml = loc.highlight
-        ? '<span class="card-tag">⭐ 本次亮點</span>'
-        : loc.isMinor
-          ? `<span class="card-tag tag-minor"><i class="fa-solid fa-circle-pause"></i> ${loc.minorLabel || '順路中繼點'}</span>`
-          : loc.isAltHotel
-            ? '<span class="card-tag tag-minor">🏨 備選住宿</span>'
-            : '';
-
-      const dayBadge = loc.itineraryDay
-        ? `<span class="card-day day-${loc.itineraryDay}"><i class="fa-solid fa-route" aria-hidden="true"></i> Day ${loc.itineraryDay}</span>`
-        : '';
-
-      const dateBadge = loc.eventDate
-        ? `<span class="card-date"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i>${escHtml(loc.eventDate)}</span>`
-        : '';
+      const tagHtml = loc.highlight ? '<span class="card-tag">⭐ 本次亮點</span>' : loc.isMinor ? `<span class="card-tag tag-minor"><i class="fa-solid fa-circle-pause"></i> ${loc.minorLabel || '順路中繼點'}</span>` : loc.isAltHotel ? '<span class="card-tag tag-minor">🏨 備選住宿</span>' : '';
+      const dayBadge = loc.itineraryDay ? `<span class="card-day day-${loc.itineraryDay}"><i class="fa-solid fa-route" aria-hidden="true"></i> Day ${loc.itineraryDay}</span>` : '';
+      const dateBadge = loc.eventDate ? `<span class="card-date"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i>${escHtml(loc.eventDate)}</span>` : '';
 
       btn.innerHTML = `
-        <div class="card-icon" style="background:${color}" aria-hidden="true">
-          <i class="fa-solid ${loc.icon}"></i>
-        </div>
+        <div class="card-icon" style="background:${color}" aria-hidden="true"><i class="fa-solid ${loc.icon}"></i></div>
         <div class="card-body">
           ${tagHtml}${dayBadge}
           <div class="card-name">${escHtml(loc.name)}</div>
           <div class="card-meta">
-            <span class="card-distance">
-              <i class="fa-solid ${loc.isBase ? 'fa-location-dot' : 'fa-car'}" aria-hidden="true"></i>
-              ${escHtml(loc.timeFromBase)}
-            </span>
+            <span class="card-distance"><i class="fa-solid ${loc.isBase ? 'fa-location-dot' : 'fa-car'}" aria-hidden="true"></i> ${escHtml(loc.timeFromBase)}</span>
             ${dateBadge}
           </div>
           <p class="card-desc">${escHtml(loc.desc)}</p>
@@ -1499,27 +1123,23 @@
       container.appendChild(li);
     }
 
-    /* ── Itinerary Polyline ──────────────────────────── */
+    // 重新結構化的 5 天環線路徑點
     const ITINERARY_DAYS = [
-      { day: 1, color: '#e07020', ids: ['peoria','courtyard-page','antelope-canyon-x','horseshoe-bend'] },
-      { day: 2, color: '#b83030', ids: ['horseshoe-bend','monument-valley','view-hotel'] },
-      { day: 3, color: '#7040b0', ids: ['monument-valley','kingman','hoover-dam','fairfield-vegas'] },
-      { day: 4, color: '#2060a0', ids: ['fairfield-vegas','peoria'] }
+      { day: 1, color: '#e07020', ids: ['peoria','courtyard-page','antelope-canyon-x'] },
+      { day: 2, color: '#b83030', ids: ['courtyard-page','horseshoe-bend','monument-valley','view-hotel'] },
+      { day: 3, color: '#8b5a2b', ids: ['view-hotel','kanab-town','springhill-zion'] },
+      { day: 4, color: '#3a7a5a', ids: ['springhill-zion','zion-np','zion-narrows','canyon-overlook'] },
+      // Day 5 修正地理邏輯，由 US-89 S 接 I-17 回 Peoria
+      { day: 5, color: '#2060a0', ids: ['springhill-zion','peoria'] } 
     ];
-    const DAY_LABEL = { 1:'Day 1・Peoria → Page', 2:'Day 2・Page → 紀念碑谷', 3:'Day 3・紀念碑谷 → Vegas', 4:'Day 4・Vegas → Peoria' };
+    const DAY_LABEL = { 1:'Day 1・Peoria → Page', 2:'Day 2・Page → 紀念碑谷', 3:'Day 3・紀念碑谷 → Zion', 4:'Day 4・Zion 深度探索', 5:'Day 5・Zion → Peoria' };
     let polylines = [];
 
     function showPolylines() {
       hidePolylines();
       ITINERARY_DAYS.forEach(({ day, color, ids }) => {
-        const coords = ids
-          .map(id => LOCATIONS.find(l => l.id === id))
-          .filter(Boolean)
-          .map(l => [l.lat, l.lng]);
-        const pl = L.polyline(coords, {
-          color, weight: 3.5, opacity: .75,
-          dashArray: '8 6', lineJoin: 'round'
-        }).addTo(leafletMap);
+        const coords = ids.map(id => LOCATIONS.find(l => l.id === id)).filter(Boolean).map(l => [l.lat, l.lng]);
+        const pl = L.polyline(coords, { color, weight: 3.5, opacity: .75, dashArray: '8 6', lineJoin: 'round' }).addTo(leafletMap);
         pl.bindTooltip(DAY_LABEL[day], { sticky: true, className: 'itinerary-tooltip' });
         polylines.push(pl);
       });
@@ -1530,7 +1150,6 @@
       polylines = [];
     }
 
-    /* ── Filter ──────────────────────────────────────── */
     function applyFilter(cat) {
       currentCat = cat;
       const isItinerary = cat === 'itinerary';
@@ -1544,11 +1163,9 @@
         }
       });
 
-      // #12 — always clear polylines first, then re-show if needed
       hidePolylines();
       if (isItinerary) showPolylines();
 
-      // Show/hide markers
       clusterGroup.clearLayers();
       LOCATIONS.forEach(loc => {
         let visible;
@@ -1561,15 +1178,13 @@
       });
 
       renderList();
-      fitAllVisible();  // #10 — unified, mode-aware
+      fitAllVisible();
     }
 
-    /* ── Navigation ──────────────────────────────────── */
     function focusLocation(id) {
       const loc = LOCATIONS.find(l => l.id === id);
       if (!loc) return;
-      const zoom = loc.isBase ? 12
-                 : ['antelope-canyon-x','monument-valley'].includes(id) ? 11 : 13;
+      const zoom = loc.isBase ? 12 : ['antelope-canyon-x','monument-valley'].includes(id) ? 11 : 13;
 
       const sidebar   = document.getElementById('sidebar');
       const toggleBtn = document.getElementById('sidebar-toggle');
@@ -1584,17 +1199,13 @@
       scrollCardIntoView(id);
     }
 
-    /* ── #4 Fit All ──────────────────────────────────── */
     function fitAllVisible() {
-      // #10 — respect current mode: itinerary uses its own bounds
       if (currentCat === 'itinerary') {
         const coords = LOCATIONS.filter(l => l.itineraryDay || l.isAltHotel).map(l => [l.lat, l.lng]);
         if (coords.length) leafletMap.fitBounds(coords, { padding: [40,40], maxZoom: 12 });
         return;
       }
-      const coords = LOCATIONS
-        .filter(loc => currentCat === 'all' || loc.category === currentCat || loc.category === 'hotel')
-        .map(loc => [loc.lat, loc.lng]);
+      const coords = LOCATIONS.filter(loc => currentCat === 'all' || loc.category === currentCat || loc.category === 'hotel').map(loc => [loc.lat, loc.lng]);
       if (coords.length) leafletMap.fitBounds(coords, { padding: [40,40], maxZoom: 12 });
     }
 
@@ -1602,36 +1213,11 @@
       document.getElementById(`card-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    /* ── Utility ─────────────────────────────────────── */
     function escHtml(str) {
-      return String(str)
-        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    /* ── Boot ────────────────────────────────────────── */
     document.addEventListener('DOMContentLoaded', () => {
-
-      // Auto update time
-      (async () => {
-        try {
-          const res = await fetch('version.json?_=' + Date.now());
-          if (!res.ok) throw new Error();
-          const { updated_utc } = await res.json();
-          const d   = new Date(updated_utc);
-          const cst = new Date(d.getTime() + 8 * 3600 * 1000);
-          const pad = n => String(n).padStart(2,'0');
-          const mo  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][cst.getUTCMonth()];
-          const lbl = `${mo} ${cst.getUTCDate()}, ${cst.getUTCFullYear()} · ${pad(cst.getUTCHours())}:${pad(cst.getUTCMinutes())} CST`;
-          const el  = document.getElementById('update-time');
-          el.textContent = lbl;
-          el.setAttribute('datetime', updated_utc.replace('Z','+00:00'));
-        } catch {
-          document.getElementById('update-time')?.closest('.header-update')?.style.setProperty('display','none');
-        }
-      })();
-
-      // Filter bar
       document.getElementById('filter-bar').addEventListener('click', e => {
         const btn = e.target.closest('.filter-btn');
         if (btn) applyFilter(btn.dataset.cat);
@@ -1641,7 +1227,6 @@
         if (btn) applyFilter(btn.dataset.cat);
       });
 
-      // Sidebar toggle (#3 — re-expand on toggle)
       const sidebar   = document.getElementById('sidebar');
       const toggleBtn = document.getElementById('sidebar-toggle');
       toggleBtn.addEventListener('click', () => {
@@ -1651,81 +1236,11 @@
         setTimeout(() => leafletMap?.invalidateSize(), 360);
       });
 
-      // #4 — fit-all button
       document.getElementById('fit-btn').addEventListener('click', fitAllVisible);
-
-      // Geolocation
-      let userMarker = null, userCircle = null;
-      const locateBtn  = document.getElementById('locate-btn');
-      const locateIcon = locateBtn.querySelector('i');
-
-      function setLocateState(state) {
-        locateBtn.classList.remove('locating','located','error');
-        if (state === 'locating') {
-          locateBtn.classList.add('locating');
-          locateIcon.className = 'fa-solid fa-spinner fa-spin';
-          locateBtn.setAttribute('aria-label','定位中…');
-        } else if (state === 'located') {
-          locateBtn.classList.add('located');
-          locateIcon.className = 'fa-solid fa-location-crosshairs';
-          locateBtn.setAttribute('aria-label','已定位 — 再次點擊重新定位');
-        } else if (state === 'error') {
-          locateBtn.classList.add('error');
-          locateIcon.className = 'fa-solid fa-location-crosshairs';
-          locateBtn.setAttribute('aria-label','定位失敗，點擊重試');
-        } else {
-          locateIcon.className = 'fa-solid fa-location-crosshairs';
-          locateBtn.setAttribute('aria-label','定位我的位置');
-        }
-      }
-
-      function placeUserMarker(lat, lng, accuracy) {
-        if (userMarker) { leafletMap.removeLayer(userMarker); userMarker = null; }
-        if (userCircle) { leafletMap.removeLayer(userCircle); userCircle = null; }
-        if (accuracy && accuracy < 50000) {
-          userCircle = L.circle([lat,lng], {
-            radius: accuracy, color:'#4a9dc4', fillColor:'#4a9dc4',
-            fillOpacity:.08, weight:1.5, dashArray:'4 4'
-          }).addTo(leafletMap);
-        }
-        const userIcon = L.divIcon({
-          className: '',
-          html: `<div style="width:18px;height:18px;border-radius:50%;background:#4a9dc4;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35);animation:pulse-ring .9s ease infinite;" aria-label="您的位置"></div>`,
-          iconSize:[18,18], iconAnchor:[9,9], popupAnchor:[0,-12]
-        });
-        userMarker = L.marker([lat,lng], { icon: userIcon, zIndexOffset:1000 })
-          .addTo(leafletMap)
-          .bindPopup('<div style="font-family:var(--font-body);font-size:.82rem;font-weight:600;color:#4a9dc4">📍 您目前的位置</div>', { maxWidth:180 });
-      }
-
-      locateBtn.addEventListener('click', () => {
-        if (!navigator.geolocation) { alert('此裝置不支援 GPS 定位。'); return; }
-        setLocateState('locating');
-        navigator.geolocation.getCurrentPosition(
-          pos => {
-            const { latitude:lat, longitude:lng, accuracy } = pos.coords;
-            placeUserMarker(lat, lng, accuracy);
-            leafletMap.flyTo([lat,lng], 12, { duration:1.2 });
-            setLocateState('located');
-          },
-          err => {
-            setLocateState('error');
-            const msgs = { 1:'請在瀏覽器設定中允許位置存取權限。', 2:'無法取得位置，請確認 GPS 已開啟。', 3:'定位逾時，請重試。' };
-            alert(msgs[err.code] || '定位發生未知錯誤。');
-          },
-          { enableHighAccuracy:true, timeout:12000, maximumAge:30000 }
-        );
-      });
-
+      
       initMap();
       renderList();
       setTimeout(() => leafletMap?.invalidateSize(), 300);
-
-      // Load existing ratings
-      fetch('ratings.json?_=' + Date.now())
-        .then(r => r.ok ? r.json() : {})
-        .then(data => { ratingsData = data; })
-        .catch(() => {});
     });
 
     window.addEventListener('resize', () => leafletMap?.invalidateSize());
